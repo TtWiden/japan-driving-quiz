@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本運転免許 道路標識クイズ | 外免切替50問対策</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a2a4a;
+            --accent: #c8a45c;
+            --accent-light: #e8d5a0;
+            --correct: #2e7d32;
+            --wrong: #c62828;
+            --white: #ffffff;
+            --light-gray: #f5f6fa;
+            --text: #333;
+            --text-light: #666;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--light-gray);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* Header */
+        .header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 20px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .header h1 { font-size: 1.5rem; letter-spacing: 0.05em; }
+        .header p { font-size: 0.85rem; opacity: 0.8; margin-top: 4px; }
+
+        /* Navigation Tabs */
+        .tab-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 68px;
+            z-index: 99;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 14px 20px;
+            border: none;
+            background: none;
+            font-size: 0.9rem;
+            font-family: inherit;
+            cursor: pointer;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .tab-btn:hover { color: var(--primary); background: rgba(26,42,74,0.04); }
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--accent);
+            font-weight: 700;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ===== Sign Gallery ===== */
+        .sign-category { margin-bottom: 40px; }
+        .sign-category h2 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            border-left: 4px solid var(--accent);
+            padding-left: 12px;
+            margin-bottom: 20px;
+        }
+        .sign-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px;
+        }
+        .sign-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        .sign-card:hover { transform: translateY(-3px); }
+        .sign-card img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+        .sign-card .sign-name {
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--text);
+            line-height: 1.4;
+        }
+        .sign-card .sign-name-en {
+            font-size: 0.68rem;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        /* ===== Quiz Section ===== */
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .quiz-header h2 { font-size: 1.4rem; color: var(--primary); }
+        .quiz-header p { color: var(--text-light); margin-top: 6px; }
+
+        .quiz-mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .mode-btn {
+            padding: 10px 24px;
+            border: 2px solid var(--primary);
+            border-radius: 30px;
+            background: var(--white);
+            color: var(--primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .mode-btn:hover, .mode-btn.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .quiz-progress {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 16px 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .progress-bar-wrap {
+            flex: 1;
+            min-width: 200px;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 4px;
+            transition: width 0.4s;
+        }
+        .score-display { font-weight: 700; color: var(--primary); }
+
+        .question-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+        .question-number {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .question-image {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .question-image img {
+            max-width: 160px;
+            max-height: 160px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-btn {
+            padding: 14px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: var(--white);
+            font-family: inherit;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .option-btn:hover { border-color: var(--primary); background: rgba(26,42,74,0.03); }
+        .option-btn.correct {
+            border-color: var(--correct);
+            background: #e8f5e9;
+            color: var(--correct);
+            font-weight: 700;
+        }
+        .option-btn.wrong {
+            border-color: var(--wrong);
+            background: #ffebee;
+            color: var(--wrong);
+        }
+        .option-btn .option-label {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+        .option-btn.correct .option-label { background: var(--correct); color: var(--white); }
+        .option-btn.wrong .option-label { background: var(--wrong); color: var(--white); }
+
+        .explanation {
+            margin-top: 16px;
+            padding: 16px;
+            background: #fff8e1;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+            display: none;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+        .explanation.show { display: block; }
+
+        .next-btn {
+            display: none;
+            margin: 20px auto 0;
+            padding: 12px 40px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 30px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .next-btn:hover { background: #2a3f6a; }
+        .next-btn.show { display: block; }
+
+        /* Result */
+        .result-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        .result-score {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .result-score span { font-size: 1.5rem; }
+        .result-label { font-size: 1.1rem; color: var(--text-light); margin: 10px 0 20px; }
+        .result-pass {
+            display: inline-block;
+            padding: 8px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        .result-pass.pass { background: #e8f5e9; color: var(--correct); }
+        .result-pass.fail { background: #ffebee; color: var(--wrong); }
+        .restart-btn {
+            padding: 12px 40px;
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            border-radius: 30px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .restart-btn:hover { background: #b8943c; }
+
+        /* ===== Links Section ===== */
+        .link-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+        }
+        .link-card:hover { transform: translateY(-2px); }
+        .link-card h3 { color: var(--primary); font-size: 1rem; margin-bottom: 6px; }
+        .link-card p { font-size: 0.85rem; color: var(--text-light); margin-bottom: 10px; }
+        .link-card a {
+            display: inline-block;
+            color: var(--accent);
+            font-weight: 500;
+            text-decoration: none;
+            border-bottom: 1px solid var(--accent);
+        }
+        .link-card a:hover { color: #b8943c; }
+        .link-card .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+        .badge-free { background: #e8f5e9; color: var(--correct); }
+        .badge-official { background: #e3f2fd; color: #1565c0; }
+        .badge-app { background: #f3e5f5; color: #7b1fa2; }
+        .badge-new { background: #fff3e0; color: #e65100; }
+
+        /* ===== Info Section ===== */
+        .info-box {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        .info-box h3 {
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+        }
+        .info-box table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+        .info-box th, .info-box td {
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .info-box th {
+            background: var(--light-gray);
+            font-weight: 600;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+        .highlight-red { color: var(--wrong); font-weight: 700; }
+        .highlight-green { color: var(--correct); font-weight: 700; }
+
+        /* Modal for sign detail */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal-content {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        .modal-content img { width: 120px; height: 120px; object-fit: contain; margin-bottom: 16px; }
+        .modal-content h3 { color: var(--primary); margin-bottom: 6px; }
+        .modal-content .modal-en { color: var(--text-light); font-size: 0.85rem; margin-bottom: 12px; }
+        .modal-content p { font-size: 0.9rem; line-height: 1.7; }
+        .modal-close {
+            margin-top: 16px;
+            padding: 8px 30px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.1rem; }
+            .tab-btn { padding: 10px 14px; font-size: 0.8rem; }
+            .sign-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+            .sign-card img { width: 60px; height: 60px; }
+            .question-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>日本道路標識クイズ & 外免切替50問対策</h1>
+    <p>Japanese Road Signs Quiz & License Conversion Test Prep</p>
+</div>
+
+<nav class="tab-nav">
+    <button class="tab-btn active" data-tab="signs">標識一覧</button>
+    <button class="tab-btn" data-tab="quiz-sign">標識クイズ</button>
+    <button class="tab-btn" data-tab="quiz-50">50問模擬</button>
+    <button class="tab-btn" data-tab="links">学習リンク</button>
+    <button class="tab-btn" data-tab="info">試験情報</button>
+</nav>
+
+<!-- ==================== TAB 1: Sign Gallery ==================== -->
+<div class="container">
+<div id="tab-signs" class="tab-content active">
+    <div class="sign-category">
+        <h2>規制標識 Regulatory Signs</h2>
+        <div class="sign-grid" id="regulatory-signs"></div>
+    </div>
+    <div class="sign-category">
+        <h2>警戒標識 Warning Signs</h2>
+        <div class="sign-grid" id="warning-signs"></div>
+    </div>
+    <div class="sign-category">
+        <h2>指示標識 Instruction Signs</h2>
+        <div class="sign-grid" id="instruction-signs"></div>
+    </div>
+    <div class="sign-category">
+        <h2>案内標識 Guide Signs</h2>
+        <div class="sign-grid" id="guide-signs"></div>
+    </div>
+    <div class="sign-category">
+        <h2>補助標識 Auxiliary Signs</h2>
+        <div class="sign-grid" id="auxiliary-signs"></div>
+    </div>
+</div>
+
+<!-- ==================== TAB 2: Sign Quiz ==================== -->
+<div id="tab-quiz-sign" class="tab-content">
+    <div class="quiz-header">
+        <h2>道路標識クイズ</h2>
+        <p>標識の画像を見て、正しい意味を選びましょう</p>
+    </div>
+    <div class="quiz-progress">
+        <span class="score-display" id="sign-score">0 / 0</span>
+        <div class="progress-bar-wrap"><div class="progress-bar" id="sign-progress" style="width:0%"></div></div>
+        <span id="sign-qnum">0 / 10</span>
+    </div>
+    <div id="sign-quiz-area"></div>
+</div>
+
+<!-- ==================== TAB 3: 50-Question Mock ==================== -->
+<div id="tab-quiz-50" class="tab-content">
+    <div class="quiz-header">
+        <h2>外免切替 50問模擬テスト</h2>
+        <p>2025年10月新制度対応 / 合格ライン: 45問以上正解 (90%)</p>
+    </div>
+    <div class="quiz-mode-selector">
+        <button class="mode-btn active" onclick="start50Quiz('all')">全50問</button>
+        <button class="mode-btn" onclick="start50Quiz('random25')">ランダム25問</button>
+        <button class="mode-btn" onclick="start50Quiz('random10')">ランダム10問</button>
+    </div>
+    <div class="quiz-progress">
+        <span class="score-display" id="mock-score">0 / 0</span>
+        <div class="progress-bar-wrap"><div class="progress-bar" id="mock-progress" style="width:0%"></div></div>
+        <span id="mock-qnum">0 / 50</span>
+    </div>
+    <div id="mock-quiz-area"></div>
+</div>
+
+<!-- ==================== TAB 4: Links ==================== -->
+<div id="tab-links" class="tab-content">
+    <div class="quiz-header">
+        <h2>学習リソース & リンク集</h2>
+        <p>外免切替・運転免許試験に役立つサイト</p>
+    </div>
+
+    <div class="link-card">
+        <h3>Lease Japan - 50問模擬テスト <span class="badge badge-free">無料</span><span class="badge badge-new">最新</span></h3>
+        <p>外免切替50問の完全模擬テスト。英語対応。複数セットの練習問題あり。</p>
+        <a href="https://leasejapan.com/en/license-conversion/written-test-guide/" target="_blank">leasejapan.com/en/license-conversion/written-test-guide/</a>
+    </div>
+
+    <div class="link-card">
+        <h3>Drivey (ジップラス) - AI学習アプリ <span class="badge badge-app">アプリ</span><span class="badge badge-new">2026新</span></h3>
+        <p>外免切替専用のAI学習サービス。日/英/中/越/インドネシア/ミャンマー語対応。</p>
+        <a href="https://ziplus.jp/switching_license/en/tips/written-test/gaimen-chisiki/" target="_blank">ziplus.jp - 外免切替ガイド</a>
+    </div>
+
+    <div class="link-card">
+        <h3>JAF - 交通ルールクイズ <span class="badge badge-official">公式</span><span class="badge badge-free">無料</span></h3>
+        <p>日本自動車連盟(JAF)公式の交通ルールトレーニング。英語対応。</p>
+        <a href="https://english.jaf.or.jp/safe-driving/quiz" target="_blank">english.jaf.or.jp/safe-driving/quiz</a>
+    </div>
+
+    <div class="link-card">
+        <h3>Japan DrivExam - 仮免・本免練習 <span class="badge badge-free">無料</span></h3>
+        <p>仮免・本免の模擬試験。英語・日本語両方対応。</p>
+        <a href="https://www.japan.drivexam.com/" target="_blank">japan.drivexam.com</a>
+    </div>
+
+    <div class="link-card">
+        <h3>traffic-rules.com - 練習テスト <span class="badge badge-free">無料</span></h3>
+        <p>500問以上の練習問題。道路標識と交通ルールをカバー。</p>
+        <a href="https://traffic-rules.com/en/japan/practice-test" target="_blank">traffic-rules.com/en/japan/practice-test</a>
+    </div>
+
+    <div class="link-card">
+        <h3>NihonDrive - 総合学習サイト <span class="badge badge-free">無料</span></h3>
+        <p>ひっかけ問題対策、模擬試験、学習教材が充実。</p>
+        <a href="https://nihondrive.com/" target="_blank">nihondrive.com</a>
+    </div>
+
+    <div class="link-card">
+        <h3>免許取ったる学院 - 日英練習テスト <span class="badge badge-free">無料</span></h3>
+        <p>仮免50問・本免95問の模擬テスト。英語版あり。</p>
+        <a href="https://menkyo-mtg.com/gakka-pwa_en/index.php" target="_blank">menkyo-mtg.com - English Practice</a>
+    </div>
+
+    <div class="link-card">
+        <h3>国土交通省 - 道路標識一覧PDF <span class="badge badge-official">公式</span></h3>
+        <p>日本の道路標識全種類の公式PDF一覧表。</p>
+        <a href="https://www.mlit.go.jp/road/sign/sign/douro/ichiran.pdf" target="_blank">mlit.go.jp - 道路標識一覧</a>
+    </div>
+
+    <div class="link-card">
+        <h3>警視庁 - 外国語学科試験案内 <span class="badge badge-official">公式</span></h3>
+        <p>21言語対応の学科試験情報。対応言語一覧あり。</p>
+        <a href="https://www.keishicho.metro.tokyo.lg.jp/menkyo/menkyo/foreign_exam.html" target="_blank">keishicho.metro.tokyo.lg.jp</a>
+    </div>
+
+    <div class="link-card">
+        <h3>普通免許問題集 英語版 (iOS) <span class="badge badge-app">アプリ</span></h3>
+        <p>iPhone用の運転免許練習アプリ。英語版。</p>
+        <a href="https://apps.apple.com/jp/app/%E6%99%AE%E9%80%9A%E5%85%8D%E8%A8%B1%E5%95%8F%E9%A1%8C%E9%9B%86-%E8%8B%B1%E8%AA%9E%E7%89%88/id1077180862" target="_blank">App Store - 普通免許問題集 英語版</a>
+    </div>
+</div>
+
+<!-- ==================== TAB 5: Test Info ==================== -->
+<div id="tab-info" class="tab-content">
+    <div class="quiz-header">
+        <h2>外免切替試験 制度情報</h2>
+        <p>2025年10月施行 新制度の概要</p>
+    </div>
+
+    <div class="info-box">
+        <h3>新旧制度比較</h3>
+        <table>
+            <tr><th></th><th>旧制度 (~2025.9)</th><th>新制度 (2025.10~)</th></tr>
+            <tr><td>問題数</td><td>10問</td><td class="highlight-red">50問</td></tr>
+            <tr><td>形式</td><td>イラスト+2択</td><td class="highlight-red">文章問題+○×</td></tr>
+            <tr><td>合格基準</td><td>7/10 (70%)</td><td class="highlight-red">45/50 (90%)</td></tr>
+            <tr><td>対応言語</td><td>複数言語</td><td>21言語</td></tr>
+            <tr><td>合格率</td><td>約90%</td><td class="highlight-red">約30~40%</td></tr>
+        </table>
+    </div>
+
+    <div class="info-box">
+        <h3>対応言語 (21言語)</h3>
+        <p style="font-size:0.88rem; line-height:2;">
+            日本語 / 英語 / 中国語 / ベトナム語 / ポルトガル語 / スペイン語 / タイ語 / タガログ語 / ロシア語 / ペルシャ語 / 韓国語 / インドネシア語 / クメール語 / ネパール語 / ミャンマー語 / モンゴル語 / ウクライナ語 / シンハラ語 / ウルドゥー語 / アラビア語 / ヒンディー語
+        </p>
+    </div>
+
+    <div class="info-box">
+        <h3>出題範囲 (22項目)</h3>
+        <table>
+            <tr><td>1</td><td>運転者の心得</td><td>12</td><td>追越し・行き違い</td></tr>
+            <tr><td>2</td><td>信号の種類と意味</td><td>13</td><td>歩行者の保護</td></tr>
+            <tr><td>3</td><td>標識・標示の種類</td><td>14</td><td>安全な速度と車間距離</td></tr>
+            <tr><td>4</td><td>車の通行場所</td><td>15</td><td>乗車と積載</td></tr>
+            <tr><td>5</td><td>車の通行方法</td><td>16</td><td>けん引</td></tr>
+            <tr><td>6</td><td>交差点の通行</td><td>17</td><td>駐車と停車</td></tr>
+            <tr><td>7</td><td>緊急自動車の優先</td><td>18</td><td>灯火</td></tr>
+            <tr><td>8</td><td>踏切の通過</td><td>19</td><td>合図</td></tr>
+            <tr><td>9</td><td>安全確認と運転操作</td><td>20</td><td>警音器の使用</td></tr>
+            <tr><td>10</td><td>高速道路の運転</td><td>21</td><td>運転免許制度</td></tr>
+            <tr><td>11</td><td>悪条件下の運転</td><td>22</td><td>自動車の保守管理</td></tr>
+        </table>
+    </div>
+
+    <div class="info-box">
+        <h3>合格のコツ</h3>
+        <ul style="padding-left:20px; font-size:0.9rem;">
+            <li>日本語の「ひっかけ表現」に注意 (「必ず」「すべて」「いつでも」などの絶対表現)</li>
+            <li>標識の形・色の違いを正確に覚える</li>
+            <li>数値を正確に記憶 (停止距離、制限速度、車間距離など)</li>
+            <li>交差点の優先順位ルールを完全に理解する</li>
+            <li>原動機付自転車の特殊ルール (二段階右折、30km/h制限)</li>
+            <li>高速道路の特別ルール (最低速度、路側帯、故障時対応)</li>
+        </ul>
+    </div>
+</div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="signModal">
+    <div class="modal-content">
+        <img id="modal-img" src="" alt="">
+        <h3 id="modal-name"></h3>
+        <div class="modal-en" id="modal-en"></div>
+        <p id="modal-desc"></p>
+        <button class="modal-close" onclick="closeModal()">閉じる</button>
+    </div>
+</div>
+
+<footer>
+    <p>本サイトの標識画像はWikimedia Commonsのパブリックドメイン/CC素材を使用しています。</p>
+    <p>学習目的のみ。最新情報は各公式サイトをご確認ください。</p>
+</footer>
+
+<script>
+// ===== Sign Data with Wikimedia Commons SVG images =====
+const signData = {
+    regulatory: [
+        { id:"r1", name:"通行止め", en:"Road Closed", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Japan_road_sign_301.svg/100px-Japan_road_sign_301.svg.png", desc:"歩行者・車・路面電車のすべてが通行できません。" },
+        { id:"r2", name:"車両通行止め", en:"No Vehicles", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Japan_road_sign_302.svg/100px-Japan_road_sign_302.svg.png", desc:"車両（自動車・原付・軽車両）は通行できません。歩行者は通行可能。" },
+        { id:"r3", name:"車両進入禁止", en:"No Entry", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Japan_road_sign_303.svg/100px-Japan_road_sign_303.svg.png", desc:"車両の進入を禁止。一方通行の出口に多い。" },
+        { id:"r4", name:"二輪の自動車以外の自動車通行止め", en:"No Cars", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Japan_road_sign_304.svg/100px-Japan_road_sign_304.svg.png", desc:"二輪車以外の自動車は通行止め。" },
+        { id:"r5", name:"大型貨物自動車等通行止め", en:"No Large Trucks", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Japan_road_sign_305.svg/100px-Japan_road_sign_305.svg.png", desc:"大型貨物自動車、特定中型貨物自動車、大型特殊自動車の通行禁止。" },
+        { id:"r6", name:"二輪の自動車・原動機付自転車通行止め", en:"No Motorcycles", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Japan_road_sign_310.svg/100px-Japan_road_sign_310.svg.png", desc:"自動二輪車と原動機付自転車の通行禁止。" },
+        { id:"r7", name:"自転車通行止め", en:"No Bicycles", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Japan_road_sign_309.svg/100px-Japan_road_sign_309.svg.png", desc:"自転車の通行を禁止。" },
+        { id:"r8", name:"歩行者通行止め", en:"No Pedestrians", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Japan_road_sign_331.svg/100px-Japan_road_sign_331.svg.png", desc:"歩行者の通行を禁止。" },
+        { id:"r9", name:"指定方向外進行禁止(直進)", en:"No Right/Left Turn", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Japan_road_sign_311-A.svg/100px-Japan_road_sign_311-A.svg.png", desc:"矢印の方向以外への進行を禁止。" },
+        { id:"r10", name:"車両横断禁止", en:"No Crossing", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Japan_road_sign_312.svg/100px-Japan_road_sign_312.svg.png", desc:"道路を横断して施設等に入ることを禁止。" },
+        { id:"r11", name:"転回禁止", en:"No U-Turn", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Japan_road_sign_313.svg/100px-Japan_road_sign_313.svg.png", desc:"Uターン禁止。" },
+        { id:"r12", name:"追越しのための右側部分はみ出し通行禁止", en:"No Overtaking", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Japan_road_sign_314.svg/100px-Japan_road_sign_314.svg.png", desc:"追越しのために道路の右側にはみ出すことを禁止。" },
+        { id:"r13", name:"駐停車禁止", en:"No Stopping/Parking", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Japan_road_sign_316.svg/100px-Japan_road_sign_316.svg.png", desc:"車両の駐車と停車の両方を禁止。" },
+        { id:"r14", name:"駐車禁止", en:"No Parking", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Japan_road_sign_317.svg/100px-Japan_road_sign_317.svg.png", desc:"車両の駐車を禁止。停車は可能。" },
+        { id:"r15", name:"最高速度 30km/h", en:"Speed Limit 30", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Japan_road_sign_323_%2830%29.svg/100px-Japan_road_sign_323_%2830%29.svg.png", desc:"表示された速度を超えて運転してはいけません。" },
+        { id:"r16", name:"最高速度 50km/h", en:"Speed Limit 50", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Japan_road_sign_323_%2850%29.svg/100px-Japan_road_sign_323_%2850%29.svg.png", desc:"表示された速度を超えて運転してはいけません。" },
+        { id:"r17", name:"最低速度", en:"Minimum Speed", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Japan_road_sign_324_%2850%29.svg/100px-Japan_road_sign_324_%2850%29.svg.png", desc:"表示された速度に達しない速度で運転してはいけません。高速道路で使用。" },
+        { id:"r18", name:"一方通行", en:"One Way", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Japan_road_sign_326-A.svg/100px-Japan_road_sign_326-A.svg.png", desc:"矢印の方向にのみ通行できます。" },
+        { id:"r19", name:"一時停止", en:"Stop", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Japan_road_sign_330.svg/100px-Japan_road_sign_330.svg.png", desc:"車両と路面電車は必ず停止しなければなりません。" },
+        { id:"r20", name:"徐行", en:"Slow Down", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Japan_road_sign_329.svg/100px-Japan_road_sign_329.svg.png", desc:"車両と路面電車は徐行しなければなりません。" },
+        { id:"r21", name:"重量制限", en:"Weight Limit", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Japan_road_sign_320.svg/100px-Japan_road_sign_320.svg.png", desc:"表示された重量を超える車両は通行できません。" },
+        { id:"r22", name:"高さ制限", en:"Height Limit", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Japan_road_sign_321.svg/100px-Japan_road_sign_321.svg.png", desc:"表示された高さを超える車両は通行できません。" },
+    ],
+    warning: [
+        { id:"w1", name:"十形道路交差点あり", en:"Crossroad Ahead", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Japan_road_sign_201.svg/100px-Japan_road_sign_201.svg.png", desc:"前方に十字路の交差点があります。" },
+        { id:"w2", name:"右(左)方屈曲あり", en:"Curve Ahead", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Japan_road_sign_203-A.svg/100px-Japan_road_sign_203-A.svg.png", desc:"前方に急なカーブがあります。" },
+        { id:"w3", name:"右(左)方屈折あり", en:"Sharp Turn", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Japan_road_sign_205-A.svg/100px-Japan_road_sign_205-A.svg.png", desc:"前方に直角に近い急カーブがあります。" },
+        { id:"w4", name:"踏切あり", en:"Railway Crossing", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Japan_road_sign_207-A.svg/100px-Japan_road_sign_207-A.svg.png", desc:"前方に踏切があります。" },
+        { id:"w5", name:"信号機あり", en:"Traffic Signal Ahead", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Japan_road_sign_208-2.svg/100px-Japan_road_sign_208-2.svg.png", desc:"前方に信号機があります。" },
+        { id:"w6", name:"すべりやすい", en:"Slippery Road", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Japan_road_sign_209.svg/100px-Japan_road_sign_209.svg.png", desc:"路面がすべりやすくなっています。" },
+        { id:"w7", name:"落石のおそれあり", en:"Falling Rocks", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Japan_road_sign_210.svg/100px-Japan_road_sign_210.svg.png", desc:"山から石が落ちてくる恐れがあります。" },
+        { id:"w8", name:"幅員減少", en:"Road Narrows", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Japan_road_sign_212.svg/100px-Japan_road_sign_212.svg.png", desc:"前方で道路の幅が狭くなります。" },
+        { id:"w9", name:"上り急勾配あり", en:"Steep Hill (Upward)", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Japan_road_sign_212-2.svg/100px-Japan_road_sign_212-2.svg.png", desc:"前方に急な上り坂があります。" },
+        { id:"w10", name:"下り急勾配あり", en:"Steep Hill (Downward)", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Japan_road_sign_212-3.svg/100px-Japan_road_sign_212-3.svg.png", desc:"前方に急な下り坂があります。" },
+        { id:"w11", name:"道路工事中", en:"Road Works", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Japan_road_sign_211.svg/100px-Japan_road_sign_211.svg.png", desc:"前方で道路工事を行っています。" },
+        { id:"w12", name:"横風注意", en:"Side Wind", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Japan_road_sign_214.svg/100px-Japan_road_sign_214.svg.png", desc:"強い横風が吹くことがあります。" },
+        { id:"w13", name:"動物が飛び出すおそれあり", en:"Animal Crossing", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Japan_road_sign_215-2.svg/100px-Japan_road_sign_215-2.svg.png", desc:"動物が飛び出してくる可能性があります。" },
+        { id:"w14", name:"学校・幼稚園・保育所等あり", en:"School Zone", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Japan_road_sign_208.svg/100px-Japan_road_sign_208.svg.png", desc:"付近に学校・幼稚園・保育所等があります。" },
+    ],
+    instruction: [
+        { id:"i1", name:"横断歩道", en:"Pedestrian Crossing", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Japan_road_sign_407-B.svg/100px-Japan_road_sign_407-B.svg.png", desc:"横断歩道があることを示します。" },
+        { id:"i2", name:"自転車横断帯", en:"Bicycle Crossing", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Japan_road_sign_407-3.svg/100px-Japan_road_sign_407-3.svg.png", desc:"自転車横断帯があることを示します。" },
+        { id:"i3", name:"駐車可", en:"Parking Permitted", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Japan_road_sign_403.svg/100px-Japan_road_sign_403.svg.png", desc:"駐車ができることを示します。" },
+        { id:"i4", name:"停車可", en:"Stopping Permitted", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Japan_road_sign_404.svg/100px-Japan_road_sign_404.svg.png", desc:"停車ができることを示します。" },
+        { id:"i5", name:"優先道路", en:"Priority Road", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Japan_road_sign_401.svg/100px-Japan_road_sign_401.svg.png", desc:"この道路が優先道路であることを示します。" },
+        { id:"i6", name:"中央線", en:"Center Line", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Japan_road_sign_406.svg/100px-Japan_road_sign_406.svg.png", desc:"道路の中央を示します。" },
+        { id:"i7", name:"安全地帯", en:"Safety Zone", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Japan_road_sign_411.svg/100px-Japan_road_sign_411.svg.png", desc:"安全地帯であることを示します。路面電車の停留所等。" },
+        { id:"i8", name:"規制予告", en:"Regulation Preview", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Japan_road_sign_409-2.svg/100px-Japan_road_sign_409-2.svg.png", desc:"前方の規制内容を予告します。" },
+    ],
+    guide: [
+        { id:"g1", name:"国道番号", en:"National Route", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Japanese_National_Route_Sign_0001.svg/100px-Japanese_National_Route_Sign_0001.svg.png", desc:"国道の番号を示します。" },
+        { id:"g2", name:"都道府県道番号", en:"Prefectural Route", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Japanese_Prefectural_Route_Sign_Example.svg/100px-Japanese_Prefectural_Route_Sign_Example.svg.png", desc:"都道府県道の番号を示します。" },
+        { id:"g3", name:"方面及び方向", en:"Direction Sign", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Japanese_Road_sign_%28Direction_and_Distance%29.svg/100px-Japanese_Road_sign_%28Direction_and_Distance%29.svg.png", desc:"目的地の方面と方向を案内します。" },
+    ],
+    auxiliary: [
+        { id:"a1", name:"日曜・休日を除く", en:"Except Sundays/Holidays", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Japan_road_sign_503-C.svg/100px-Japan_road_sign_503-C.svg.png", desc:"日曜日と休日には本標識の規制が適用されません。" },
+        { id:"a2", name:"始まり", en:"Zone Begins", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Japan_road_sign_505-A.svg/100px-Japan_road_sign_505-A.svg.png", desc:"ここから規制区間が始まることを示します。" },
+        { id:"a3", name:"終わり", en:"Zone Ends", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Japan_road_sign_507-A.svg/100px-Japan_road_sign_507-A.svg.png", desc:"規制区間がここで終わることを示します。" },
+    ]
+};
+
+// ===== 50-Question Mock Test Data =====
+const mockQuestions = [
+    { q:"初心者マークは、運転に自信がある人はつけなくてもよい。", a:false, exp:"免許取得後1年未満の人は、運転に自信があっても初心者マークの表示が義務付けられています。" },
+    { q:"横断歩道やその手前30メートル以内では、前の車を追い越したり追い抜いたりしてはいけない。", a:true, exp:"横断歩道の手前30m以内は追越し・追い抜き禁止です。" },
+    { q:"高速道路で時速100キロで走行するとき、前の車との車間距離は100メートル以上とるのがよい。", a:true, exp:"高速走行時は速度(km/h)と同じ数値(m)以上の車間距離が目安です。" },
+    { q:"路面電車の停留所で乗降客がいないときは、安全地帯のそばを徐行して通過できる。", a:true, exp:"安全地帯があり、乗降客がいなければ徐行して通過できます。" },
+    { q:"後方から追越しをしようとする車があるときは、速度を上げて追越しをさせないようにしなければならない。", a:false, exp:"追越しをしようとする車があるときは、左に寄って進路を譲らなければなりません。" },
+    { q:"高さ制限の標識は、荷台からの高さではなく、地面からの高さを示している。", a:true, exp:"高さ制限は地面から車両(荷物を含む)の最高部までの高さです。" },
+    { q:"故障で高速道路に停車するときは、車の後方に停止表示器材を置かなければならない。", a:true, exp:"高速道路上で停車する場合は停止表示器材の設置が義務です。" },
+    { q:"後退する合図は、腕を車の外に出して斜め下に伸ばし、手のひらを後ろに向けてその腕を前後に動かす。", a:true, exp:"これは正しい後退の手信号です。" },
+    { q:"警察官が腕を横に水平に上げているとき、その警察官の身体の正面に対面する交通は赤信号と同じ意味である。", a:true, exp:"警察官の正面に対面する場合は赤信号と同じ意味です。" },
+    { q:"高速道路の路側帯は、疲れたときに停車して休憩してもよい。", a:false, exp:"路側帯は駐停車禁止です。休憩はサービスエリア・パーキングエリアを利用してください。" },
+    { q:"見通しの良い道路であっても、対向車がある場合は追越しをしてはならない。", a:false, exp:"見通しがよく安全に行える場合は追越しが可能です。対向車の有無ではなく安全確認が重要です。" },
+    { q:"白の実線で区画線が引かれている場合、軽車両はその線を越えて通行できる。", a:false, exp:"白の実線（区画線）を越えての走行は全車両禁止です。" },
+    { q:"二輪車に乗るときは前傾姿勢をとったほうがバランスがよい。", a:false, exp:"極端な前傾姿勢は視野が狭くなり危険です。適切な乗車姿勢を保ちましょう。" },
+    { q:"高速走行中にタイヤが波打つ現象はハイドロプレーニング現象という。", a:false, exp:"タイヤが波打つ現象は「スタンディングウェーブ現象」です。ハイドロプレーニングは水膜で滑る現象。" },
+    { q:"交通整理の行われていない交差点では、道幅が同じなら左方から来る車が優先する。", a:true, exp:"道幅が同じ交差点では「左方優先」のルールがあります。" },
+    { q:"荷物が車体から3.5メートル以上はみ出す場合は、出発地の警察署長に許可を受けなければならない。", a:false, exp:"車体の長さの10分の1を超える場合に許可が必要です。3.5mは関係ありません。" },
+    { q:"長時間運転して疲労を感じたときは、無理をせず休憩をとったほうがよい。", a:true, exp:"疲労運転は危険です。こまめに休憩を取りましょう。" },
+    { q:"高速道路で故障したときは、車内で待機するよりもガードレールの外に避難したほうが安全である。", a:true, exp:"後続車の追突の危険があるため、車外のガードレール外に避難してください。" },
+    { q:"車検のステッカーには、次の定期点検の時期が表示されている。", a:false, exp:"車検ステッカーには次の車検(検査)の有効期限が表示されています。" },
+    { q:"対向車があっても、交差点で右折する場合は直進車より優先して通行できる。", a:false, exp:"右折車は直進車・左折車に対して道を譲らなければなりません。" },
+    { q:"信号のある交差点で停止線がある場合、停止線の直前で停止しなければならない。", a:true, exp:"停止線があるときはその直前で停止します。" },
+    { q:"ブレーキをかけてから車が停止するまでの間は、空走距離と制動距離がある。", a:true, exp:"停止距離＝空走距離＋制動距離です。" },
+    { q:"二輪車は死角が大きいので、他の車の運転者から見落とされる危険がある。", a:true, exp:"二輪車は四輪車から見えにくく、死角に入りやすいため注意が必要です。" },
+    { q:"冷却水やエンジンオイルが少し不足していても、走行には差し支えない。", a:false, exp:"冷却水やオイルの不足は重大な故障の原因になります。走行前に確認・補充しましょう。" },
+    { q:"車庫に入れるときは、前進で入れるより後退で入れたほうが出るときに安全である。", a:true, exp:"後退で駐車すれば、出るときに前方の安全確認がしやすくなります。" },
+    { q:"けん引自動車は高速道路では一番左側の車線を通行しなければならない。", a:false, exp:"けん引自動車の車線規制は道路状況や標識によって異なります。" },
+    { q:"バス停に停車していたバスが発進の合図をしたときは、後方の車はそのバスの発進を妨げてはならない。", a:true, exp:"路線バスの発進を妨害してはいけません。" },
+    { q:"停車している車のそばを通るときは、急にドアが開いたり人が飛び出すことがあるので注意する。", a:true, exp:"停車車両の周囲は十分に注意が必要です。" },
+    { q:"山道で行き違うとき、がけ側の車が一時停止して谷側の車に道を譲る。", a:false, exp:"谷側の車が一時停止して、がけ側（山側）の車に道を譲ります。" },
+    { q:"大型車のすぐ後ろを走行するときは、信号が見えにくくなることがあるので注意が必要である。", a:true, exp:"大型車の後方では信号や標識が見えにくくなります。" },
+    { q:"荷物を多く積んだ車は、空車のときよりも制動距離が短くなる。", a:false, exp:"荷物が重いほど制動距離は長くなります。" },
+    { q:"高速道路では、やむを得ない場合でも後退してはならない。", a:true, exp:"高速道路での後退は禁止です。" },
+    { q:"原動機付自転車は交差点で二段階右折の合図を出さなければならない場合がある。", a:true, exp:"3車線以上の交差点や標識がある場合、原付は二段階右折が必要です。" },
+    { q:"車を運転するときは、走行前に日常点検を行ったほうがよい。", a:true, exp:"日常点検は安全運転の基本です。" },
+    { q:"夜間走行中は近くに注意を集中し、手元をよく見て運転したほうが安全である。", a:false, exp:"夜間はできるだけ遠くを見て、前方の状況を早めに把握することが大切です。" },
+    { q:"速度が速くなるほど、遠くのものは見えるが近くのものは見えにくくなる。", a:true, exp:"速度が上がると視野が狭くなり、近くの物が見えにくくなります（トンネル視野）。" },
+    { q:"下り坂でも追越しは禁止されていない。", a:false, exp:"急な下り坂は追越し禁止場所に指定されています。" },
+    { q:"エンジンオイルの量は、オイルレベルゲージのFとLの間にあればよい。", a:true, exp:"F(Full)とL(Low)の間が適正量です。" },
+    { q:"歩行者が横断歩道の途中で立ち止まっていたら、注意しながらそのまま通過してよい。", a:false, exp:"歩行者がいる場合は必ず一時停止して歩行者を優先させなければなりません。" },
+    { q:"追越しをするときは、できるだけ前の車との間隔を少なくして追い越す。", a:false, exp:"追越し時は十分な安全間隔を保たなければなりません。" },
+    { q:"ハンドルやブレーキに故障がなければ、他の部分に多少の故障があっても運転してよい。", a:false, exp:"故障がある車は運転してはいけません。すべての部品が正常であることが必要です。" },
+    { q:"原動機付自転車は二人乗りをすることができない。", a:true, exp:"原動機付自転車（50cc以下）は一人乗りです。" },
+    { q:"赤信号でも左折の青矢印が出ていれば、軽車両も左折できる。", a:false, exp:"青矢印信号では軽車両（自転車等）は進行できません。" },
+    { q:"一般の原動機付自転車には二人乗りしてはいけない。", a:true, exp:"50cc以下の原付は乗車定員1名です。" },
+    { q:"オートマチック車でエンジンが止まった場合、スターターモーターの力で車を動かすことができる。", a:false, exp:"スターターモーターはエンジン始動用であり、車を移動させることはできません。" },
+    { q:"雨の日は歩行者が急に車道に出てくることがあるので注意が必要である。", a:true, exp:"雨天時は傘で視界が遮られた歩行者が急に飛び出すことがあります。" },
+    { q:"右左折するときは、右左折しようとする地点の30メートル手前で合図をする。", a:true, exp:"右左折の合図は30m手前で行います。" },
+    { q:"荷物が方向指示器やブレーキランプを覆い隠しても、後方をよく確認して運転すれば問題ない。", a:false, exp:"灯火類が見えない状態での運転は禁止です。" },
+    { q:"中央線が黄色の実線で引かれている道路では、追越しのために中央線をはみ出してはならない。", a:true, exp:"黄色の実線の中央線は追越しのためのはみ出し禁止です。" },
+    { q:"踏切とその手前10メートル以内は、駐停車が禁止されている。", a:true, exp:"踏切の前後10m以内は駐停車禁止です。" },
+];
+
+// ===== Render Sign Gallery =====
+function renderSigns() {
+    const categories = {
+        'regulatory-signs': signData.regulatory,
+        'warning-signs': signData.warning,
+        'instruction-signs': signData.instruction,
+        'guide-signs': signData.guide,
+        'auxiliary-signs': signData.auxiliary
+    };
+    for (const [containerId, signs] of Object.entries(categories)) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = signs.map(s => `
+            <div class="sign-card" onclick="openModal('${s.id}')">
+                <img src="${s.img}" alt="${s.name}" loading="lazy">
+                <div class="sign-name">${s.name}</div>
+                <div class="sign-name-en">${s.en}</div>
+            </div>
+        `).join('');
+    }
+}
+
+// ===== Modal =====
+const allSigns = [...signData.regulatory, ...signData.warning, ...signData.instruction, ...signData.guide, ...signData.auxiliary];
+function openModal(id) {
+    const s = allSigns.find(x => x.id === id);
+    if (!s) return;
+    document.getElementById('modal-img').src = s.img;
+    document.getElementById('modal-name').textContent = s.name;
+    document.getElementById('modal-en').textContent = s.en;
+    document.getElementById('modal-desc').textContent = s.desc;
+    document.getElementById('signModal').classList.add('show');
+}
+function closeModal() { document.getElementById('signModal').classList.remove('show'); }
+document.getElementById('signModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+// ===== Sign Quiz =====
+let signQuizState = { questions: [], current: 0, score: 0 };
+
+function generateSignQuiz() {
+    const quizSigns = [...signData.regulatory, ...signData.warning, ...signData.instruction].sort(() => Math.random() - 0.5).slice(0, 10);
+    signQuizState = { questions: [], current: 0, score: 0 };
+
+    quizSigns.forEach(correctSign => {
+        const pool = allSigns.filter(s => s.id !== correctSign.id);
+        const wrongOptions = pool.sort(() => Math.random() - 0.5).slice(0, 3);
+        const options = [correctSign, ...wrongOptions].sort(() => Math.random() - 0.5);
+        signQuizState.questions.push({
+            sign: correctSign,
+            options: options,
+            correctIndex: options.indexOf(correctSign)
+        });
+    });
+
+    renderSignQuestion();
+}
+
+function renderSignQuestion() {
+    const area = document.getElementById('sign-quiz-area');
+    const state = signQuizState;
+
+    if (state.current >= state.questions.length) {
+        const pct = Math.round((state.score / state.questions.length) * 100);
+        area.innerHTML = `
+            <div class="result-card">
+                <div class="result-score">${state.score}<span> / ${state.questions.length}</span></div>
+                <div class="result-label">正答率: ${pct}%</div>
+                <div class="result-pass ${pct >= 90 ? 'pass' : 'fail'}">${pct >= 90 ? '合格!' : '不合格'}</div>
+                <br><button class="restart-btn" onclick="generateSignQuiz()">もう一度挑戦</button>
+            </div>`;
+        return;
+    }
+
+    const q = state.questions[state.current];
+    const labels = ['A', 'B', 'C', 'D'];
+    document.getElementById('sign-score').textContent = `${state.score} 正解`;
+    document.getElementById('sign-qnum').textContent = `${state.current + 1} / ${state.questions.length}`;
+    document.getElementById('sign-progress').style.width = `${(state.current / state.questions.length) * 100}%`;
+
+    area.innerHTML = `
+        <div class="question-card">
+            <span class="question-number">第${state.current + 1}問</span>
+            <div class="question-image"><img src="${q.sign.img}" alt="標識"></div>
+            <div class="question-text">この標識の意味は何ですか？</div>
+            <div class="options">
+                ${q.options.map((opt, i) => `
+                    <button class="option-btn" onclick="answerSignQuiz(${i}, ${q.correctIndex})" id="sign-opt-${i}">
+                        <span class="option-label">${labels[i]}</span>
+                        <span>${opt.name}（${opt.en}）</span>
+                    </button>
+                `).join('')}
+            </div>
+            <div class="explanation" id="sign-explanation">${q.sign.desc}</div>
+            <button class="next-btn" id="sign-next" onclick="nextSignQuestion()">次の問題</button>
+        </div>`;
+}
+
+function answerSignQuiz(selected, correct) {
+    document.querySelectorAll('[id^="sign-opt-"]').forEach(btn => btn.disabled = true);
+    document.getElementById(`sign-opt-${correct}`).classList.add('correct');
+    if (selected === correct) {
+        signQuizState.score++;
+    } else {
+        document.getElementById(`sign-opt-${selected}`).classList.add('wrong');
+    }
+    document.getElementById('sign-explanation').classList.add('show');
+    document.getElementById('sign-next').classList.add('show');
+    document.getElementById('sign-score').textContent = `${signQuizState.score} 正解`;
+}
+
+function nextSignQuestion() {
+    signQuizState.current++;
+    renderSignQuestion();
+}
+
+// ===== 50-Question Mock Test =====
+let mockState = { questions: [], current: 0, score: 0 };
+
+function start50Quiz(mode) {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+
+    let questions = [...mockQuestions];
+    if (mode === 'random25') {
+        questions = questions.sort(() => Math.random() - 0.5).slice(0, 25);
+    } else if (mode === 'random10') {
+        questions = questions.sort(() => Math.random() - 0.5).slice(0, 10);
+    } else {
+        questions = questions.sort(() => Math.random() - 0.5);
+    }
+    mockState = { questions, current: 0, score: 0 };
+    renderMockQuestion();
+}
+
+function renderMockQuestion() {
+    const area = document.getElementById('mock-quiz-area');
+    const state = mockState;
+    const total = state.questions.length;
+
+    if (state.current >= total) {
+        const pct = Math.round((state.score / total) * 100);
+        const passLine = Math.ceil(total * 0.9);
+        area.innerHTML = `
+            <div class="result-card">
+                <div class="result-score">${state.score}<span> / ${total}</span></div>
+                <div class="result-label">正答率: ${pct}% (合格ライン: ${passLine}問正解 / 90%)</div>
+                <div class="result-pass ${state.score >= passLine ? 'pass' : 'fail'}">${state.score >= passLine ? '合格!' : '不合格'}</div>
+                <br><button class="restart-btn" onclick="start50Quiz('all')">もう一度挑戦</button>
+            </div>`;
+        return;
+    }
+
+    const q = state.questions[state.current];
+    document.getElementById('mock-score').textContent = `${state.score} 正解`;
+    document.getElementById('mock-qnum').textContent = `${state.current + 1} / ${total}`;
+    document.getElementById('mock-progress').style.width = `${(state.current / total) * 100}%`;
+
+    area.innerHTML = `
+        <div class="question-card">
+            <span class="question-number">第${state.current + 1}問</span>
+            <div class="question-text">${q.q}</div>
+            <div class="options">
+                <button class="option-btn" onclick="answerMock(true, ${q.a})" id="mock-true">
+                    <span class="option-label">O</span><span>正しい (True)</span>
+                </button>
+                <button class="option-btn" onclick="answerMock(false, ${q.a})" id="mock-false">
+                    <span class="option-label">X</span><span>誤り (False)</span>
+                </button>
+            </div>
+            <div class="explanation" id="mock-explanation">${q.exp}</div>
+            <button class="next-btn" id="mock-next" onclick="nextMockQuestion()">次の問題</button>
+        </div>`;
+}
+
+function answerMock(selected, correct) {
+    document.getElementById('mock-true').disabled = true;
+    document.getElementById('mock-false').disabled = true;
+
+    const correctId = correct ? 'mock-true' : 'mock-false';
+    const selectedId = selected ? 'mock-true' : 'mock-false';
+
+    document.getElementById(correctId).classList.add('correct');
+    if (selected === correct) {
+        mockState.score++;
+    } else {
+        document.getElementById(selectedId).classList.add('wrong');
+    }
+    document.getElementById('mock-explanation').classList.add('show');
+    document.getElementById('mock-next').classList.add('show');
+    document.getElementById('mock-score').textContent = `${mockState.score} 正解`;
+}
+
+function nextMockQuestion() {
+    mockState.current++;
+    renderMockQuestion();
+}
+
+// ===== Tab Navigation =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+
+        // Auto-start quizzes
+        if (btn.dataset.tab === 'quiz-sign' && signQuizState.questions.length === 0) generateSignQuiz();
+        if (btn.dataset.tab === 'quiz-50' && mockState.questions.length === 0) start50Quiz('all');
+    });
+});
+
+// ===== Init =====
+renderSigns();
+</script>
+
+</body>
+</html>
