@@ -417,13 +417,13 @@ function renderSQ(){
     document.getElementById('sq-scr').textContent=`${sq.sc} ${t('correct')}`;
     document.getElementById('sq-num').textContent=`${sq.ci+1}/${sq.qs.length}`;
     document.getElementById('sq-bar').style.width=`${sq.ci/sq.qs.length*100}%`;
-    a.innerHTML=`<div class="qc"><span class="qn">${sq.ci+1}</span><div class="qi">${drawSign(q.sign,true)}</div><div class="qt">${t('qWhat')}</div><div class="opts">${q.opts.map((o,i)=>`<button class="ob" onclick="ansSQ(${i},${q.ci})" id="sqo${i}"><span class="ol">${lb[i]}</span><span>${o.n[lang]||o.n.ja}</span></button>`).join('')}</div><div class="exp" id="sqExp">${q.sign.d[lang]||q.sign.d.ja}</div><button class="nbtn" id="sqN" onclick="sq.ci++;renderSQ()">${t('next')}</button></div>`;
+    const qi=sq.ci, correctIdx=q.ci;
+    a.innerHTML=`<div class="qc"><span class="qn">${qi+1}</span><div class="qi">${drawSign(q.sign,true)}</div><div class="qt">${t('qWhat')}</div><div class="opts">${q.opts.map((o,i)=>`<button class="ob" onclick="ansSQ(${i},${correctIdx})" id="sqo${i}"><span class="ol">${lb[i]}</span><span>${o.n[lang]||o.n.ja}</span></button>`).join('')}</div><div class="exp" id="sqExp">${q.sign.d[lang]||q.sign.d.ja}</div><button class="nbtn" id="sqN" onclick="sq.ci++;renderSQ()">${t('next')}</button></div>`;
 }
-function ansSQ(sel,qi){
-    const q=sq.qs[qi];
+function ansSQ(sel,correctIdx){
     document.querySelectorAll('[id^=sqo]').forEach(b=>b.disabled=true);
-    document.getElementById('sqo'+q.ci).classList.add('ok');
-    if(sel===q.ci) sq.sc++; else document.getElementById('sqo'+sel).classList.add('ng');
+    document.getElementById('sqo'+correctIdx).classList.add('ok');
+    if(sel===correctIdx) sq.sc++; else document.getElementById('sqo'+sel).classList.add('ng');
     document.getElementById('sqExp').classList.add('on');
     document.getElementById('sqN').classList.add('on');
     document.getElementById('sq-scr').textContent=`${sq.sc} ${t('correct')}`;
