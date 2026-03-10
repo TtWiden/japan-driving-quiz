@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Japan DriveMaster | 日本驾考通</title>
+<title>日本運転免許学習サイト | 一般社団法人 教育研究支援機構</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -15,7 +15,7 @@ body{font-family:'Inter','Noto Sans SC','Noto Sans JP',sans-serif;background:var
 .navbar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--gray3);transition:box-shadow .3s}
 .navbar.scrolled{box-shadow:0 2px 20px rgba(0,0,0,.08)}
 .nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px}
-.nav-logo{font-size:1.2rem;font-weight:800;color:var(--pri);text-decoration:none;display:flex;align-items:center;gap:10px;letter-spacing:-.02em}
+.nav-logo{font-size:1rem;font-weight:700;color:var(--pri);text-decoration:none;display:flex;align-items:center;gap:8px;letter-spacing:-.01em;white-space:nowrap}
 .nav-logo-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .nav-logo-icon img{width:100%;height:100%;object-fit:cover;border-radius:8px}
 .nav-links{display:flex;align-items:center;gap:28px}
@@ -23,10 +23,10 @@ body{font-family:'Inter','Noto Sans SC','Noto Sans JP',sans-serif;background:var
 .nav-links a:hover{color:var(--pri)}
 .nav-drop{position:relative}
 .nav-drop>a::after{content:'▾';margin-left:4px;font-size:.7rem}
-.nav-drop-menu{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);min-width:180px;background:var(--white);border:1px solid var(--gray3);border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.1);padding:8px 0;z-index:200;margin-top:8px}
+.nav-drop-menu{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);min-width:180px;background:linear-gradient(180deg,#f8f9fb 0%,#eef0f4 100%);border:1px solid var(--gray3);border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.12);padding:8px 0;z-index:200;margin-top:8px}
 .nav-drop:hover .nav-drop-menu{display:block}
-.nav-drop-menu a{display:block;padding:9px 18px;font-size:.82rem;color:var(--gray)!important;white-space:nowrap}
-.nav-drop-menu a:hover{background:var(--bg);color:var(--pri)!important}
+.nav-drop-menu a{display:block;padding:9px 18px;font-size:.82rem;color:#4b5563!important;white-space:nowrap;border-radius:6px;margin:2px 6px}
+.nav-drop-menu a:hover{background:var(--white);color:var(--pri)!important;box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .nav-cta{padding:8px 20px;background:var(--pri);color:var(--white)!important;border-radius:8px;font-weight:600;transition:background .2s}
 .nav-cta:hover{background:#2a3e66!important}
 .lang-sw{display:flex;background:var(--bg);border:1px solid var(--gray3);border-radius:8px;overflow:hidden}
@@ -241,7 +241,7 @@ body{font-family:'Inter','Noto Sans SC','Noto Sans JP',sans-serif;background:var
   .nav-links a{padding:12px 0;border-bottom:1px solid var(--gray3);font-size:.9rem;width:100%}
   .nav-links a:last-of-type{border-bottom:none}
   .nav-drop>a::after{content:'▾';margin-left:4px}
-  .nav-drop-menu{display:none;position:static;transform:none;box-shadow:none;border:none;padding:0 0 0 16px;margin:0;min-width:auto;background:rgba(245,246,250,.6);border-radius:8px;margin-bottom:4px}
+  .nav-drop-menu{display:none;position:static;transform:none;box-shadow:none;border:none;padding:4px 0 4px 12px;margin:0;min-width:auto;background:linear-gradient(180deg,rgba(240,242,246,.7) 0%,rgba(228,230,236,.5) 100%);border-radius:8px;margin-bottom:4px;border-left:3px solid var(--acc)}
   .nav-drop{width:100%}
   .nav-drop>a{display:block;width:100%}
   .nav-drop.open .nav-drop-menu{display:block}
@@ -273,7 +273,7 @@ body{font-family:'Inter','Noto Sans SC','Noto Sans JP',sans-serif;background:var
 <div class="nav-inner">
   <a href="#" class="nav-logo" onclick="goHome()">
     <div class="nav-logo-icon"><img src="9077b891-476a-41d1-9a7e-e09307b54f17.png" alt="Logo"></div>
-    DriveMaster
+    教育研究支援機構
   </a>
   <div class="nav-links">
     <a href="#" onclick="goSection('signs')" data-i="nav_signs">標識</a>
@@ -449,7 +449,7 @@ body{font-family:'Inter','Noto Sans SC','Noto Sans JP',sans-serif;background:var
 <div class="container">
   <div class="footer-grid">
     <div class="footer-brand">
-      <a href="#" class="nav-logo" onclick="goHome()"><div class="nav-logo-icon"><img src="9077b891-476a-41d1-9a7e-e09307b54f17.png" alt="Logo"></div> DriveMaster</a>
+      <a href="#" class="nav-logo" onclick="goHome()"><div class="nav-logo-icon"><img src="9077b891-476a-41d1-9a7e-e09307b54f17.png" alt="Logo"></div> 教育研究支援機構</a>
       <p data-i="ft_brand">Comprehensive study tool for Japan driving license conversion exam. For study purposes only.</p>
     </div>
     <div class="footer-col"><h4 data-i="ft_study">Study</h4><ul>
@@ -468,7 +468,7 @@ body{font-family:'Inter','Noto Sans SC','Noto Sans JP',sans-serif;background:var
       <li><a href="#" onclick="return false" data-i="ft_contact">Contact</a></li>
     </ul></div>
   </div>
-  <div class="footer-bottom" data-i="ft_copy">&copy; 2025 DriveMaster. For study purposes only. Check official sites for latest info.</div>
+  <div class="footer-bottom" data-i="ft_copy">&copy; 2025 教育研究支援機構. For study purposes only. Check official sites for latest info.</div>
 </div>
 </footer>
 
@@ -498,7 +498,7 @@ en:{
   errTitle:"Error Notebook",errDesc:"Review questions you got wrong",errEmpty:"No errors yet! Keep practicing.",
   qWhat:"What does this sign mean?",next:"Next",retry:"Try Again",pass:"PASS!",fail:"FAIL",score:"Score",passLine:"Pass line",correct:"Correct",close:"Close",trueL:"True (O)",falseL:"False (X)",
   cats:["Regulatory","Warning","Instruction","Guide","Auxiliary"],
-  ft_brand:"Comprehensive study tool for Japan driving license conversion. For study purposes only.",ft_study:"Study",ft_services:"Services",ft_info:"Info",ft_resources:"Resources",ft_contact:"Contact",ft_copy:"&copy; 2025 DriveMaster. For study purposes only.",
+  ft_brand:"A free public educational resource for Japan driving license exam preparation. Provided by General Incorporated Association for Education Research Support.",ft_study:"Study",ft_services:"Services",ft_info:"Info",ft_resources:"Resources",ft_contact:"Contact",ft_copy:"&copy; 2025 一般社団法人 教育研究支援機構. Free educational resource for public benefit.",
   infoCmp:"Old vs New System",infoH:["","Old (~Sep 2025)","New (Oct 2025~)"],infoRows:[["Questions","10","50"],["Format","Illustrations + 2-choice","Text + True/False"],["Pass","7/10 (70%)","45/50 (90%)"],["Pass rate","~90%","~30-40%"]],
   infoTips:"Tips for Passing",infoTipList:["Watch for absolute words: 'always','never','all'","Memorize sign shapes and colors accurately","Remember exact numbers (stopping distance, speed)","Understand intersection priority rules","Moped special rules (two-stage right turn, 30km/h)","Expressway special rules"],
   forum:[{tag:"exp",title:"Passed on first try!",body:"Studied for 2 weeks using this site. The key is memorizing trick questions.",user:"Alex",time:"2h ago",replies:12},{tag:"help",title:"Which signs are most confusing?",body:"I keep mixing up No Parking vs No Stopping. Any tips?",user:"Yuki",time:"5h ago",replies:8},{tag:"tip",title:"Top 10 trick questions",body:"Here's my list of questions that tripped me up during practice...",user:"Chen",time:"1d ago",replies:23},{tag:"help",title:"Test center in Samezu?",body:"Has anyone taken the test at Samezu recently? How's the process?",user:"Maria",time:"2d ago",replies:15}],
@@ -526,7 +526,7 @@ ja:{
   errTitle:"間違いノート",errDesc:"間違えた問題を復習しましょう",errEmpty:"間違いはまだありません。練習を続けましょう。",
   qWhat:"この標識の意味は？",next:"次の問題",retry:"もう一度",pass:"合格!",fail:"不合格",score:"正答率",passLine:"合格ライン",correct:"正解",close:"閉じる",trueL:"正しい (O)",falseL:"誤り (X)",
   cats:["規制標識","警戒標識","指示標識","案内標識","補助標識"],
-  ft_brand:"日本運転免許外免切替試験の総合学習ツール。学習目的のみ。",ft_study:"学習",ft_services:"サービス",ft_info:"情報",ft_resources:"学習リソース",ft_contact:"お問い合わせ",ft_copy:"&copy; 2025 DriveMaster. 学習目的のみ。最新情報は公式サイトをご確認ください。",
+  ft_brand:"日本運転免許試験対策の無料公益学習サイトです。一般社団法人 教育研究支援機構が提供しています。",ft_study:"学習",ft_services:"サービス",ft_info:"情報",ft_resources:"学習リソース",ft_contact:"お問い合わせ",ft_copy:"&copy; 2025 一般社団法人 教育研究支援機構. 公益学習目的で無料提供。",
   infoCmp:"新旧制度比較",infoH:["","旧制度(~2025.9)","新制度(2025.10~)"],infoRows:[["問題数","10問","50問"],["形式","イラスト+2択","文章+○×"],["合格基準","7/10(70%)","45/50(90%)"],["合格率","約90%","約30~40%"]],
   infoTips:"合格のコツ",infoTipList:["「必ず」「すべて」等の絶対表現に注意","標識の形・色の違いを正確に覚える","数値を正確に記憶(停止距離、速度等)","交差点の優先順位ルールを理解","原付の特殊ルール(二段階右折、30km/h)","高速道路の特別ルール"],
   forum:[{tag:"exp",title:"一発合格しました！",body:"このサイトで2週間勉強。ひっかけ問題を覚えるのがカギです。",user:"Alex",time:"2時間前",replies:12},{tag:"help",title:"紛らわしい標識は？",body:"駐車禁止と駐停車禁止をいつも間違えます。コツはありますか？",user:"Yuki",time:"5時間前",replies:8},{tag:"tip",title:"ひっかけ問題トップ10",body:"練習中に引っかかった問題リストを共有します...",user:"Chen",time:"1日前",replies:23},{tag:"help",title:"鮫洲の試験場について",body:"最近鮫洲で受験した方いますか？流れを教えてください。",user:"Maria",time:"2日前",replies:15}],
@@ -554,7 +554,7 @@ zh:{
   errTitle:"错题本",errDesc:"复习做错的题目",errEmpty:"还没有错题，继续练习吧！",
   qWhat:"这个标识是什么意思？",next:"下一题",retry:"再试一次",pass:"合格!",fail:"不合格",score:"正确率",passLine:"合格线",correct:"正确",close:"关闭",trueL:"正确 (O)",falseL:"错误 (X)",
   cats:["规制标识","警告标识","指示标识","引导标识","辅助标识"],
-  ft_brand:"日本驾照换证考试综合学习工具。仅供学习使用。",ft_study:"学习",ft_services:"服务",ft_info:"信息",ft_resources:"学习资源",ft_contact:"联系我们",ft_copy:"&copy; 2025 DriveMaster. 仅供学习使用。最新信息请查阅官方网站。",
+  ft_brand:"日本驾照考试备考免费公益学习网站。由一般社团法人 教育研究支援机构提供。",ft_study:"学习",ft_services:"服务",ft_info:"信息",ft_resources:"学习资源",ft_contact:"联系我们",ft_copy:"&copy; 2025 一般社团法人 教育研究支援机构. 公益学习，免费提供。",
   infoCmp:"新旧制度对比",infoH:["","旧制度(~2025.9)","新制度(2025.10~)"],infoRows:[["题数","10题","50题"],["形式","插图+2选1","文字+判断"],["合格标准","7/10(70%)","45/50(90%)"],["合格率","约90%","约30~40%"]],
   infoTips:"通过技巧",infoTipList:["注意「必须」「所有」等绝对表述","准确记忆标识的形状和颜色","牢记数字(停车距离、速度限制等)","理解路口优先权规则","助力车特殊规则(两段式右转、30km/h)","高速公路特别规则"],
   forum:[{tag:"exp",title:"一次通过了！",body:"用这个网站学了两周，关键是记住陷阱题。",user:"Alex",time:"2小时前",replies:12},{tag:"help",title:"最容易混淆的标识？",body:"我总是分不清禁止停车和禁止临时停车，有什么技巧吗？",user:"Yuki",time:"5小时前",replies:8},{tag:"tip",title:"十大陷阱题",body:"分享一下练习中最容易出错的题目...",user:"Chen",time:"1天前",replies:23},{tag:"help",title:"�的场考场怎么样？",body:"最近有人在�的场考过吗？流程是怎样的？",user:"Maria",time:"2天前",replies:15}],
