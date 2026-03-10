@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japan DriveMaster | 日本驾考通</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--pri:#1a2a4a;--acc:#c8a45c;--ok:#2e7d32;--ng:#c62828;--bg:#f7f8fc;--white:#fff;--gray:#6b7280;--gray2:#9ca3af;--gray3:#e5e7eb;--sh:0 4px 24px rgba(0,0,0,.06);--radius:14px}
+html{scroll-behavior:smooth}
+body{font-family:'Inter','Noto Sans SC','Noto Sans JP',sans-serif;background:var(--bg);color:#1f2937;line-height:1.7;-webkit-font-smoothing:antialiased}
+
+/* === NAVBAR === */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--gray3);transition:box-shadow .3s}
+.navbar.scrolled{box-shadow:0 2px 20px rgba(0,0,0,.08)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-size:1.2rem;font-weight:800;color:var(--pri);text-decoration:none;display:flex;align-items:center;gap:10px;letter-spacing:-.02em}
+.nav-logo-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.nav-logo-icon img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:.875rem;font-weight:500;color:var(--gray);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--pri)}
+.nav-drop{position:relative}
+.nav-drop>a::after{content:'▾';margin-left:4px;font-size:.7rem}
+.nav-drop-menu{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);min-width:180px;background:var(--white);border:1px solid var(--gray3);border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.1);padding:8px 0;z-index:200;margin-top:8px}
+.nav-drop:hover .nav-drop-menu{display:block}
+.nav-drop-menu a{display:block;padding:9px 18px;font-size:.82rem;color:var(--gray)!important;white-space:nowrap}
+.nav-drop-menu a:hover{background:var(--bg);color:var(--pri)!important}
+.nav-cta{padding:8px 20px;background:var(--pri);color:var(--white)!important;border-radius:8px;font-weight:600;transition:background .2s}
+.nav-cta:hover{background:#2a3e66!important}
+.lang-sw{display:flex;background:var(--bg);border:1px solid var(--gray3);border-radius:8px;overflow:hidden}
+.lang-b{padding:5px 12px;font-size:.75rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--gray2);font-family:inherit;transition:all .2s}
+.lang-b.on{background:var(--pri);color:var(--white)}
+.mob-toggle{display:none;background:none;border:none;cursor:pointer;padding:4px}
+.mob-toggle span{display:block;width:22px;height:2px;background:var(--pri);margin:5px 0;border-radius:2px}
+
+/* === HERO === */
+.hero{padding:140px 0 80px;position:relative;overflow:hidden;background:linear-gradient(135deg,#f0f4ff 0%,#faf5eb 100%)}
+.hero-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:rgba(200,164,92,.1);border:1px solid rgba(200,164,92,.25);border-radius:100px;font-size:.8rem;font-weight:600;color:var(--acc);margin-bottom:24px}
+.hero-dot{width:6px;height:6px;background:var(--acc);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:3rem;font-weight:800;line-height:1.15;letter-spacing:-.03em;color:var(--pri);margin-bottom:20px}
+.hero h1 em{font-style:normal;color:var(--acc)}
+.hero-desc{font-size:1.05rem;color:var(--gray);margin-bottom:32px;max-width:480px;line-height:1.8}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:10px;font-size:.95rem;font-weight:600;text-decoration:none;border:none;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-pri{background:var(--pri);color:var(--white);box-shadow:0 2px 8px rgba(26,42,74,.2)}
+.btn-pri:hover{background:#2a3e66;transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,42,74,.25)}
+.btn-sec{background:var(--white);color:var(--pri);border:1px solid var(--gray3)}
+.btn-sec:hover{background:var(--bg)}
+.btn svg{width:16px;height:16px}
+.hero-visual{position:relative}
+.hero-carousel{position:relative;width:100%;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.1);height:380px}
+.hero-slides{display:flex;width:300%;height:100%;transition:transform .6s ease}
+.hero-slide{width:33.333%;height:100%;flex-shrink:0;position:relative}
+.hero-slide img{width:100%;height:100%;object-fit:cover}
+.hero-slide-label{position:absolute;bottom:16px;left:16px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);color:#fff;font-size:.75rem;font-weight:600;padding:5px 14px;border-radius:100px}
+.hero-dots{position:absolute;bottom:14px;right:16px;display:flex;gap:8px;z-index:2}
+.hero-dot-btn{width:10px;height:10px;border-radius:50%;border:2px solid #fff;background:transparent;cursor:pointer;transition:all .3s;padding:0;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.hero-dot-btn.on{background:#fff;transform:scale(1.2)}
+.hero-img{width:100%;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.1);object-fit:cover;height:380px}
+.hero-stats{position:absolute;bottom:-20px;left:20px;right:20px;display:flex;gap:12px}
+.hero-stat{flex:1;background:var(--white);border-radius:12px;padding:16px;text-align:center;box-shadow:var(--sh)}
+.hero-stat-val{font-size:1.5rem;font-weight:800;color:var(--acc)}
+.hero-stat-lbl{font-size:.7rem;color:var(--gray);margin-top:2px}
+
+/* === SECTIONS === */
+.section{padding:80px 0}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.sec-label{display:inline-block;font-size:.78rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.sec-title{font-size:2.2rem;font-weight:800;letter-spacing:-.03em;color:var(--pri);margin-bottom:12px;line-height:1.2}
+.sec-desc{font-size:1rem;color:var(--gray);max-width:560px;line-height:1.7}
+.sec-header{text-align:center;margin-bottom:56px}
+.sec-header .sec-desc{margin:0 auto}
+
+/* === 3 ENTRY CARDS === */
+.entry-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.entry-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--gray3);padding:32px 24px;text-align:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.entry-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.08);border-color:var(--acc)}
+.entry-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--acc);transform:scaleX(0);transition:transform .3s}
+.entry-card:hover::after{transform:scaleX(1)}
+.entry-icon{width:64px;height:64px;margin:0 auto 16px;border-radius:16px;display:flex;align-items:center;justify-content:center}
+.entry-icon img{width:48px;height:48px;object-fit:contain}
+.entry-card h3{font-size:1.05rem;font-weight:700;color:var(--pri);margin-bottom:8px}
+.entry-card p{font-size:.85rem;color:var(--gray);line-height:1.6}
+
+/* === INFO TABLE === */
+.info-card{background:var(--white);border-radius:var(--radius);padding:32px;box-shadow:var(--sh);margin-bottom:24px}
+.info-card h3{font-size:1.1rem;font-weight:700;color:var(--pri);margin-bottom:16px;padding-left:12px;border-left:4px solid var(--acc)}
+.info-card table{width:100%;border-collapse:collapse;font-size:.88rem}
+.info-card th,.info-card td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--gray3)}
+.info-card th{background:var(--bg);font-weight:600;color:var(--pri);white-space:nowrap}
+.highlight{color:var(--ng);font-weight:700}
+
+/* === QUIZ CATEGORIES === */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.cat-card{background:var(--white);border-radius:var(--radius);padding:28px 20px;text-align:center;border:1px solid var(--gray3);cursor:pointer;transition:all .3s}
+.cat-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.07);border-color:var(--acc)}
+.cat-card .cat-emoji{font-size:2rem;margin-bottom:12px;display:block}
+.cat-card h3{font-size:.95rem;font-weight:700;color:var(--pri);margin-bottom:6px}
+.cat-card p{font-size:.78rem;color:var(--gray)}
+.cat-card.error-book{border-color:var(--ng);border-style:dashed}
+.cat-card.error-book .cat-emoji{color:var(--ng)}
+
+/* === PRICING === */
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.price-card{background:var(--white);border:1px solid var(--gray3);border-radius:16px;padding:32px 28px;position:relative;transition:all .3s}
+.price-card:hover{box-shadow:0 12px 40px rgba(0,0,0,.08);transform:translateY(-2px)}
+.price-card.pop{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.pop-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);padding:4px 16px;background:var(--acc);color:var(--white);font-size:.72rem;font-weight:700;border-radius:100px}
+.price-name{font-size:.88rem;font-weight:600;color:var(--gray)}
+.price-val{font-size:2.5rem;font-weight:800;color:var(--pri);margin:8px 0 4px;letter-spacing:-.03em}
+.price-val span{font-size:.9rem;font-weight:500;color:var(--gray2)}
+.price-desc{font-size:.82rem;color:var(--gray2);margin-bottom:24px}
+.price-list{list-style:none;margin-bottom:28px}
+.price-list li{display:flex;align-items:center;gap:10px;font-size:.85rem;color:#4b5563;padding:6px 0}
+.price-list li svg{width:16px;height:16px;flex-shrink:0}
+.price-btn{display:block;width:100%;padding:12px;border-radius:10px;font-size:.9rem;font-weight:600;text-align:center;border:none;cursor:pointer;font-family:inherit;transition:all .2s}
+.price-btn-outline{background:var(--white);color:var(--pri);border:1px solid var(--gray3)}
+.price-btn-outline:hover{background:var(--bg)}
+.price-btn-fill{background:var(--pri);color:var(--white)}
+.price-btn-fill:hover{background:#2a3e66}
+
+/* === FORUM === */
+.forum-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.forum-card{background:var(--white);border-radius:var(--radius);padding:24px;border:1px solid var(--gray3);transition:all .3s}
+.forum-card:hover{box-shadow:var(--sh)}
+.forum-tag{display:inline-block;padding:2px 10px;border-radius:100px;font-size:.68rem;font-weight:600;margin-bottom:10px}
+.forum-tag.exp{background:#e8f5e9;color:var(--ok)}
+.forum-tag.help{background:#fff3e0;color:#e65100}
+.forum-tag.tip{background:#e3f2fd;color:#1565c0}
+.forum-card h4{font-size:.95rem;font-weight:700;color:var(--pri);margin-bottom:6px}
+.forum-card p{font-size:.82rem;color:var(--gray);line-height:1.6}
+.forum-meta{margin-top:12px;font-size:.72rem;color:var(--gray2);display:flex;gap:16px}
+
+/* === FAQ === */
+.faq-sec{background:var(--white)}
+.faq-list{max-width:760px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--gray3)}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;padding:22px 0;background:none;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:600;color:var(--pri);text-align:left}
+.faq-q:hover{color:var(--acc)}
+.faq-chev{width:18px;height:18px;stroke:var(--gray2);transition:transform .3s;flex-shrink:0}
+.faq-item.open .faq-chev{transform:rotate(180deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1)}
+.faq-item.open .faq-a{max-height:200px}
+.faq-a p{padding-bottom:20px;font-size:.88rem;color:var(--gray);line-height:1.7}
+
+/* === QUIZ PANELS (hidden by default) === */
+.panel{display:none;max-width:960px;margin:0 auto;padding:80px 24px 40px}
+.panel.on{display:block}
+.panel-back{position:sticky;top:72px;z-index:50;display:inline-flex;align-items:center;gap:6px;font-size:.88rem;color:var(--white);cursor:pointer;border:none;background:var(--pri);font-family:inherit;margin-bottom:24px;transition:all .2s;padding:8px 18px;border-radius:100px;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+.panel-back:hover{background:#2a3e66}
+.panel-back svg{width:16px;height:16px}
+.cat-title{font-size:1.05rem;color:var(--pri);border-left:4px solid var(--acc);padding-left:10px;margin:28px 0 14px;font-weight:700}
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}
+.sc{background:var(--white);border-radius:10px;padding:10px 6px;text-align:center;box-shadow:var(--sh);cursor:pointer;transition:transform .2s}
+.sc:hover{transform:translateY(-2px)}
+.sc .sn{font-size:.68rem;font-weight:500;margin-top:6px;line-height:1.3}
+.sign-img{width:64px;height:64px;object-fit:contain;margin:0 auto;display:block}
+.sign-img-big{width:120px;height:120px;object-fit:contain;margin:0 auto 10px;display:block}
+.qh{text-align:center;margin-bottom:20px}
+.qh h2{font-size:1.3rem;color:var(--pri);font-weight:700}
+.qh p{color:var(--gray);font-size:.85rem;margin-top:4px}
+.modes{display:flex;justify-content:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.mbtn{padding:8px 18px;border:2px solid var(--pri);border-radius:20px;background:var(--white);color:var(--pri);font-family:inherit;font-size:.82rem;cursor:pointer;transition:.3s}
+.mbtn:hover,.mbtn.on{background:var(--pri);color:var(--white)}
+.prog{background:var(--white);border-radius:10px;padding:12px 16px;margin-bottom:16px;box-shadow:var(--sh);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pbar{flex:1;min-width:120px;height:6px;background:#e0e0e0;border-radius:3px;overflow:hidden}
+.pbar-in{height:100%;background:linear-gradient(90deg,var(--acc),#e8d5a0);border-radius:3px;transition:width .4s}
+.scr{font-weight:700;color:var(--pri);font-size:.9rem}
+.qc{background:var(--white);border-radius:var(--radius);padding:24px 20px;box-shadow:var(--sh);margin-bottom:16px}
+.qn{display:inline-block;background:var(--pri);color:var(--white);padding:3px 12px;border-radius:14px;font-size:.75rem;font-weight:700;margin-bottom:12px}
+.qi{text-align:center;margin:16px 0}
+.qt{font-size:.95rem;font-weight:500;margin-bottom:16px;line-height:1.8}
+.opts{display:flex;flex-direction:column;gap:8px}
+.ob{padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;background:var(--white);font-family:inherit;font-size:.88rem;cursor:pointer;text-align:left;transition:.3s;display:flex;align-items:center;gap:10px}
+.ob:hover{border-color:var(--pri);background:rgba(26,42,74,.03)}
+.ob.ok{border-color:var(--ok);background:#e8f5e9;color:var(--ok);font-weight:700}
+.ob.ng{border-color:var(--ng);background:#ffebee;color:var(--ng)}
+.ol{width:26px;height:26px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;flex-shrink:0}
+.ob.ok .ol{background:var(--ok);color:var(--white)}
+.ob.ng .ol{background:var(--ng);color:var(--white)}
+.exp{margin-top:14px;padding:14px;background:#fff8e1;border-radius:8px;border-left:4px solid var(--acc);display:none;font-size:.85rem;line-height:1.8}
+.exp.on{display:block}
+.nbtn{display:none;margin:16px auto 0;padding:10px 36px;background:var(--pri);color:var(--white);border:none;border-radius:24px;font-family:inherit;font-size:.92rem;cursor:pointer}
+.nbtn.on{display:block}
+.rc{background:var(--white);border-radius:var(--radius);padding:36px 20px;text-align:center;box-shadow:var(--sh)}
+.rs{font-size:3.5rem;font-weight:800;color:var(--pri)}.rs span{font-size:1.3rem}
+.rl{font-size:1rem;color:var(--gray);margin:8px 0 16px}
+.rp{display:inline-block;padding:6px 24px;border-radius:24px;font-weight:700;font-size:1rem;margin-bottom:16px}
+.rp.pass{background:#e8f5e9;color:var(--ok)}.rp.fail{background:#ffebee;color:var(--ng)}
+.rbtn{padding:10px 36px;background:var(--acc);color:var(--white);border:none;border-radius:24px;font-family:inherit;font-size:.95rem;cursor:pointer;margin-top:8px}
+.lc{background:var(--white);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:var(--sh)}
+.lc h3{color:var(--pri);font-size:.95rem;margin-bottom:4px}
+.lc p{font-size:.8rem;color:var(--gray);margin-bottom:8px}
+.lc a{color:var(--acc);font-weight:500;text-decoration:none;border-bottom:1px solid var(--acc);font-size:.82rem}
+.badge{display:inline-block;padding:1px 8px;border-radius:10px;font-size:.65rem;font-weight:700;margin-left:6px}
+.b-free{background:#e8f5e9;color:var(--ok)}.b-off{background:#e3f2fd;color:#1565c0}.b-app{background:#f3e5f5;color:#7b1fa2}.b-new{background:#fff3e0;color:#e65100}
+
+/* Error Notebook */
+.err-empty{text-align:center;padding:48px 20px;color:var(--gray)}
+.err-empty svg{width:48px;height:48px;stroke:var(--gray3);margin-bottom:12px}
+.err-item{background:var(--white);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:var(--sh);border-left:4px solid var(--ng)}
+.err-item .err-q{font-size:.9rem;font-weight:600;color:var(--pri);margin-bottom:6px}
+.err-item .err-a{font-size:.82rem;color:var(--gray);line-height:1.6}
+.err-item .err-retry{margin-top:10px;padding:6px 18px;background:var(--ng);color:var(--white);border:none;border-radius:16px;font-size:.78rem;cursor:pointer;font-family:inherit}
+
+/* === MODAL === */
+.mo{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}
+.mo.on{display:flex}
+.mc{background:var(--white);border-radius:var(--radius);padding:28px;max-width:380px;width:90%;text-align:center}
+.mc h3{color:var(--pri);margin:10px 0 4px}.mc .me{color:var(--gray);font-size:.82rem;margin-bottom:10px}
+.mc p{font-size:.85rem;line-height:1.7}
+.mcl{margin-top:14px;padding:8px 24px;background:var(--pri);color:var(--white);border:none;border-radius:10px;cursor:pointer;font-family:inherit}
+
+/* === FOOTER === */
+.footer{background:var(--pri);color:rgba(255,255,255,.7);padding:48px 0 0}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px}
+.footer-brand .nav-logo{color:var(--white);margin-bottom:12px}
+.footer-brand p{font-size:.82rem;line-height:1.6;color:rgba(255,255,255,.5)}
+.footer-col h4{font-size:.8rem;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:8px}
+.footer-col a{color:rgba(255,255,255,.5);text-decoration:none;font-size:.82rem;transition:color .2s}
+.footer-col a:hover{color:var(--acc)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding:16px 0;text-align:center;font-size:.75rem;color:rgba(255,255,255,.35)}
+
+/* === REVEAL === */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.reveal.vis{opacity:1;transform:translateY(0)}
+
+/* === RESPONSIVE === */
+@media(max-width:768px){
+  .nav-links{display:none}.mob-toggle{display:block}
+  .hero h1{font-size:2rem}
+  .hero-inner{grid-template-columns:1fr;gap:32px}
+  .hero-img{height:240px}
+  .entry-grid,.price-grid{grid-template-columns:1fr}
+  .cat-grid{grid-template-columns:repeat(2,1fr)}
+  .forum-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:24px}
+  .sec-title{font-size:1.7rem}
+  .hero-stats{position:static;margin-top:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- === NAVBAR === -->
+<header class="navbar" id="navbar">
+<div class="nav-inner">
+  <a href="#" class="nav-logo" onclick="goHome()">
+    <div class="nav-logo-icon"><img src="9077b891-476a-41d1-9a7e-e09307b54f17.png" alt="Logo"></div>
+    DriveMaster
+  </a>
+  <div class="nav-links">
+    <a href="#" onclick="goSection('signs')" data-i="nav_signs">標識</a>
+    <div class="nav-drop">
+      <a href="#" data-i="nav_quiz">テスト</a>
+      <div class="nav-drop-menu">
+        <a href="#" onclick="goSection('quiz-sign')" data-i="nav_sq">標識クイズ</a>
+        <a href="#" onclick="goSection('quiz-50')" data-i="nav_mq">50問模擬テスト</a>
+        <a href="#" onclick="goSection('errors')" data-i="nav_err">間違いノート</a>
+      </div>
+    </div>
+    <a href="#" onclick="goSection('links')" data-i="nav_links">学習リンク</a>
+    <a href="#" onclick="goSection('info')" data-i="nav_info">試験情報</a>
+    <a href="#forum" data-i="nav_forum">フォーラム</a>
+    <a href="#" data-i="nav_buy" onclick="return false">車購入</a>
+    <a href="#" data-i="nav_school" onclick="return false">自動車学校</a>
+    <div class="lang-sw">
+      <button class="lang-b on" onclick="switchLang('en')">EN</button>
+      <button class="lang-b" onclick="switchLang('ja')">JA</button>
+      <button class="lang-b" onclick="switchLang('zh')">ZH</button>
+    </div>
+  </div>
+  <button class="mob-toggle" onclick="document.querySelector('.nav-links').style.display=document.querySelector('.nav-links').style.display==='flex'?'none':'flex'"><span></span><span></span><span></span></button>
+</div>
+</header>
+
+<!-- === MAIN HOMEPAGE === -->
+<div id="homepage">
+
+<!-- HERO -->
+<section class="hero">
+<div class="hero-inner">
+  <div>
+    <div class="hero-badge reveal"><span class="hero-dot"></span> <span data-i="hero_badge">2025 New 50-Question Format</span></div>
+    <h1 class="reveal" data-i="hero_title" data-html="1">Pass Your Japan<br>Driving Test the <em>Smart Way</em></h1>
+    <p class="hero-desc reveal" data-i="hero_desc">Master Japanese road signs and traffic rules with our AI-powered quiz platform. 50-question mock tests for license conversion.</p>
+    <div class="hero-btns reveal">
+      <a href="#" class="btn btn-pri" data-i="hero_btn1" onclick="goSection('quiz-50')">Start Free Quiz <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      <a href="#features" class="btn btn-sec" data-i="hero_btn2">Learn More</a>
+    </div>
+  </div>
+  <div class="hero-visual reveal">
+    <div class="hero-carousel">
+      <div class="hero-slides" id="heroSlides">
+        <div class="hero-slide"><img src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800" alt="Tokyo street"><span class="hero-slide-label">東京の街並み</span></div>
+        <div class="hero-slide"><img src="https://images.unsplash.com/photo-1554797589-7241bb691973?w=800" alt="Shibuya crossing"><span class="hero-slide-label">渋谷スクランブル交差点</span></div>
+        <div class="hero-slide"><img src="https://images.unsplash.com/photo-1491002052546-bf38f186af56?w=800" alt="Hokkaido snow road"><span class="hero-slide-label">北海道の雪道</span></div>
+      </div>
+      <div class="hero-dots">
+        <button class="hero-dot-btn on" onclick="goSlide(0)"></button>
+        <button class="hero-dot-btn" onclick="goSlide(1)"></button>
+        <button class="hero-dot-btn" onclick="goSlide(2)"></button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">50</div><div class="hero-stat-lbl" data-i="stat1">Questions</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">90%</div><div class="hero-stat-lbl" data-i="stat2">Pass Line</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">20</div><div class="hero-stat-lbl" data-i="stat3">Languages</div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 3 ENTRY POINTS -->
+<section class="section" id="features">
+<div class="container">
+  <div class="sec-header">
+    <span class="sec-label reveal" data-i="entry_label">Quick Start</span>
+    <h2 class="sec-title reveal" data-i="entry_title">Choose Your Study Mode</h2>
+    <p class="sec-desc reveal" data-i="entry_desc">Three ways to prepare for your Japanese driving license exam.</p>
+  </div>
+  <div class="entry-grid">
+    <div class="entry-card reveal" onclick="goSection('signs')">
+      <div class="entry-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Japan_road_sign_301.svg" alt="signs"></div>
+      <h3 data-i="e1_t">Signs Gallery</h3>
+      <p data-i="e1_d">Browse all Japanese road signs organized by category with explanations.</p>
+    </div>
+    <div class="entry-card reveal" onclick="goSection('quiz-sign')">
+      <div class="entry-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Japan_road_sign_201-A.svg" alt="quiz"></div>
+      <h3 data-i="e2_t">Sign Quiz</h3>
+      <p data-i="e2_d">Test your knowledge of road signs with multiple choice questions.</p>
+    </div>
+    <div class="entry-card reveal" onclick="goSection('quiz-50')">
+      <div class="entry-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Japan_road_sign_330-B.svg" alt="mock"></div>
+      <h3 data-i="e3_t">50Q Mock Test</h3>
+      <p data-i="e3_d">Full simulation of the new 2025 license conversion exam format.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- TEST INFO -->
+<section class="section" style="background:var(--white)" id="info-sec">
+<div class="container">
+  <div class="sec-header">
+    <span class="sec-label reveal" data-i="info_label">Test Information</span>
+    <h2 class="sec-title reveal" data-i="info_title">Old vs New System</h2>
+    <p class="sec-desc reveal" data-i="info_desc">Important changes effective October 2025.</p>
+  </div>
+  <div style="max-width:720px;margin:0 auto" id="info-area"></div>
+</div>
+</section>
+
+<!-- QUIZ CATEGORIES -->
+<section class="section" id="cat-sec">
+<div class="container">
+  <div class="sec-header">
+    <span class="sec-label reveal" data-i="cat_label">Quiz Categories</span>
+    <h2 class="sec-title reveal" data-i="cat_title">Practice by Topic</h2>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card reveal" onclick="goSection('signs')">
+      <span class="cat-emoji"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--pri)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span>
+      <h3 data-i="c1_t">Road Signs</h3>
+      <p data-i="c1_d">48 signs in 5 categories</p>
+    </div>
+    <div class="cat-card reveal" onclick="goSection('quiz-50')">
+      <span class="cat-emoji"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--pri)" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span>
+      <h3 data-i="c2_t">True / False</h3>
+      <p data-i="c2_d">Official format practice</p>
+    </div>
+    <div class="cat-card reveal" onclick="goSection('quiz-50')">
+      <span class="cat-emoji"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--pri)" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+      <h3 data-i="c3_t">Mock Exam</h3>
+      <p data-i="c3_d">50 / 25 / 10 questions</p>
+    </div>
+    <div class="cat-card error-book reveal" onclick="goSection('errors')">
+      <span class="cat-emoji"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--ng)" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="9" y1="10" x2="15" y2="10"/></svg></span>
+      <h3 data-i="c4_t">Error Notebook</h3>
+      <p data-i="c4_d">Review your mistakes</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- PRICING -->
+<section class="section" style="background:var(--white)" id="pricing">
+<div class="container">
+  <div class="sec-header">
+    <span class="sec-label reveal" data-i="pr_label">Pricing</span>
+    <h2 class="sec-title reveal" data-i="pr_title">Choose Your Plan</h2>
+    <p class="sec-desc reveal" data-i="pr_desc">Start free, upgrade when you need more.</p>
+  </div>
+  <div class="price-grid">
+    <div class="price-card reveal">
+      <div class="price-name">Free</div>
+      <div class="price-val">$0</div>
+      <div class="price-desc" data-i="pr1_d">Get started</div>
+      <ul class="price-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span data-i="pr1_f1">Sign gallery</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span data-i="pr1_f2">Sign quiz (10Q)</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span data-i="pr1_f3">3 languages</span></li>
+      </ul>
+      <button class="price-btn price-btn-outline" data-i="pr1_btn" onclick="goSection('quiz-sign')">Start Free</button>
+    </div>
+    <div class="price-card pop reveal">
+      <div class="pop-badge" data-i="pr_pop">Most Popular</div>
+      <div class="price-name">Pro</div>
+      <div class="price-val">$9 <span>/ mo</span></div>
+      <div class="price-desc" data-i="pr2_d">For serious test prep</div>
+      <ul class="price-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span data-i="pr2_f1">Unlimited mock tests</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span data-i="pr2_f2">Error notebook</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span data-i="pr2_f3">Detailed explanations</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span data-i="pr2_f4">Ad-free experience</span></li>
+      </ul>
+      <button class="price-btn price-btn-fill" data-i="pr2_btn">Start Free Trial</button>
+    </div>
+    <div class="price-card reveal">
+      <div class="price-name">Premium</div>
+      <div class="price-val">$19 <span>/ mo</span></div>
+      <div class="price-desc" data-i="pr3_d">Full access</div>
+      <ul class="price-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span data-i="pr3_f1">Everything in Pro</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span data-i="pr3_f2">500+ extra questions</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span data-i="pr3_f3">1-on-1 support</span></li>
+      </ul>
+      <button class="price-btn price-btn-outline" data-i="pr3_btn">Contact Us</button>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- FORUM -->
+<section class="section" id="forum">
+<div class="container">
+  <div class="sec-header">
+    <span class="sec-label reveal" data-i="fm_label">Community</span>
+    <h2 class="sec-title reveal" data-i="fm_title">Driving Test Forum</h2>
+    <p class="sec-desc reveal" data-i="fm_desc">Share experiences and get help from others.</p>
+  </div>
+  <div class="forum-grid" id="forum-list"></div>
+</div>
+</section>
+
+<!-- FAQ -->
+<section class="section faq-sec" id="faq">
+<div class="container">
+  <div class="sec-header">
+    <span class="sec-label reveal">FAQ</span>
+    <h2 class="sec-title reveal" data-i="faq_title">Frequently Asked Questions</h2>
+  </div>
+  <div class="faq-list" id="faq-list"></div>
+</div>
+</section>
+
+</div><!-- /homepage -->
+
+<!-- === QUIZ PANELS === -->
+<div class="panel" id="p-signs"><button class="panel-back" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> <span data-i="back">Back</span></button><div id="signs-area"></div></div>
+<div class="panel" id="p-quiz-sign"><button class="panel-back" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> <span data-i="back">Back</span></button><div class="qh"><h2 data-i="sqTitle"></h2><p data-i="sqDesc"></p></div><div class="prog"><span class="scr" id="sq-scr">0</span><div class="pbar"><div class="pbar-in" id="sq-bar" style="width:0%"></div></div><span id="sq-num">0/10</span></div><div id="sq-area"></div></div>
+<div class="panel" id="p-quiz-50"><button class="panel-back" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> <span data-i="back">Back</span></button><div class="qh"><h2 data-i="mqTitle"></h2><p data-i="mqDesc"></p></div><div class="modes" id="mq-modes"></div><div class="prog"><span class="scr" id="mq-scr">0</span><div class="pbar"><div class="pbar-in" id="mq-bar" style="width:0%"></div></div><span id="mq-num">0/50</span></div><div id="mq-area"></div></div>
+<div class="panel" id="p-links"><button class="panel-back" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> <span data-i="back">Back</span></button><div class="qh"><h2 data-i="lkTitle"></h2><p data-i="lkDesc"></p></div><div id="lk-list"></div></div>
+<div class="panel" id="p-errors"><button class="panel-back" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> <span data-i="back">Back</span></button><div class="qh"><h2 data-i="errTitle"></h2><p data-i="errDesc"></p></div><div id="err-area"></div></div>
+
+<div class="mo" id="modal"><div class="mc" id="modal-c"></div></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="container">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo" onclick="goHome()"><div class="nav-logo-icon"><img src="9077b891-476a-41d1-9a7e-e09307b54f17.png" alt="Logo"></div> DriveMaster</a>
+      <p data-i="ft_brand">Comprehensive study tool for Japan driving license conversion exam. For study purposes only.</p>
+    </div>
+    <div class="footer-col"><h4 data-i="ft_study">Study</h4><ul>
+      <li><a href="#" onclick="goSection('signs')" data-i="e1_t">Signs Gallery</a></li>
+      <li><a href="#" onclick="goSection('quiz-sign')" data-i="e2_t">Sign Quiz</a></li>
+      <li><a href="#" onclick="goSection('quiz-50')" data-i="e3_t">50Q Mock Test</a></li>
+      <li><a href="#" onclick="goSection('links')" data-i="ft_resources">Resources</a></li>
+    </ul></div>
+    <div class="footer-col"><h4 data-i="ft_services">Services</h4><ul>
+      <li><a href="#" onclick="return false" data-i="nav_buy">Buy Car</a></li>
+      <li><a href="#" onclick="return false" data-i="nav_school">Driving School</a></li>
+      <li><a href="#forum" data-i="nav_forum">Forum</a></li>
+    </ul></div>
+    <div class="footer-col"><h4 data-i="ft_info">Info</h4><ul>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#pricing" data-i="nav_pricing">Pricing</a></li>
+      <li><a href="#" onclick="return false" data-i="ft_contact">Contact</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom" data-i="ft_copy">&copy; 2025 DriveMaster. For study purposes only. Check official sites for latest info.</div>
+</div>
+</footer>
+
+<script>
+// ========== i18n ==========
+var lang='en';
+var I={
+en:{
+  nav_quiz:"Quiz",nav_signs:"Signs",nav_sq:"Sign Quiz",nav_mq:"50Q Mock Test",nav_err:"Error Notebook",nav_links:"Study Links",nav_info:"Exam Info",nav_buy:"Buy Car",nav_school:"Driving School",nav_forum:"Forum",nav_cta:"Start Quiz",nav_pricing:"Pricing",
+  hero_badge:"2025 New 50-Question Format",hero_title:'Pass Your Japan<br>Driving Test the <em>Smart Way</em>',hero_desc:"Master Japanese road signs and traffic rules with our quiz platform. 50-question mock tests for license conversion.",hero_btn1:"Start Free Quiz",hero_btn2:"Learn More",
+  stat1:"Questions",stat2:"Pass Line",stat3:"Languages",
+  entry_label:"Quick Start",entry_title:"Choose Your Study Mode",entry_desc:"Three ways to prepare for your Japanese driving license exam.",
+  e1_t:"Signs Gallery",e1_d:"Browse all Japanese road signs organized by category.",e2_t:"Sign Quiz",e2_d:"Test your knowledge with multiple choice questions.",e3_t:"50Q Mock Test",e3_d:"Full simulation of the new 2025 exam format.",
+  info_label:"Test Information",info_title:"Old vs New System",info_desc:"Important changes effective October 2025.",
+  cat_label:"Categories",cat_title:"Practice by Topic",c1_t:"Road Signs",c1_d:"48 signs in 5 categories",c2_t:"True / False",c2_d:"Official format practice",c3_t:"Mock Exam",c3_d:"50 / 25 / 10 questions",c4_t:"Error Notebook",c4_d:"Review your mistakes",
+  pr_label:"Pricing",pr_title:"Choose Your Plan",pr_desc:"Start free, upgrade when you need more.",pr_pop:"Most Popular",
+  pr1_d:"Get started",pr1_f1:"Sign gallery",pr1_f2:"Sign quiz (10Q)",pr1_f3:"3 languages",pr1_btn:"Start Free",
+  pr2_d:"For serious test prep",pr2_f1:"Unlimited mock tests",pr2_f2:"Error notebook",pr2_f3:"Detailed explanations",pr2_f4:"Ad-free experience",pr2_btn:"Start Free Trial",
+  pr3_d:"Full access",pr3_f1:"Everything in Pro",pr3_f2:"500+ extra questions",pr3_f3:"1-on-1 support",pr3_btn:"Contact Us",
+  fm_label:"Community",fm_title:"Driving Test Forum",fm_desc:"Share experiences and get help from others.",
+  faq_title:"Frequently Asked Questions",
+  back:"Back",
+  sqTitle:"Road Sign Quiz",sqDesc:"Look at the sign and choose the correct meaning",
+  mqTitle:"License Conversion 50Q Mock",mqDesc:"2025 Oct new format / Pass: 45+ (90%)",
+  modes:["All 50","Random 25","Random 10"],
+  lkTitle:"Study Resources",lkDesc:"Useful sites for exam prep",
+  errTitle:"Error Notebook",errDesc:"Review questions you got wrong",errEmpty:"No errors yet! Keep practicing.",
+  qWhat:"What does this sign mean?",next:"Next",retry:"Try Again",pass:"PASS!",fail:"FAIL",score:"Score",passLine:"Pass line",correct:"Correct",close:"Close",trueL:"True (O)",falseL:"False (X)",
+  cats:["Regulatory","Warning","Instruction","Guide","Auxiliary"],
+  ft_brand:"Comprehensive study tool for Japan driving license conversion. For study purposes only.",ft_study:"Study",ft_services:"Services",ft_info:"Info",ft_resources:"Resources",ft_contact:"Contact",ft_copy:"&copy; 2025 DriveMaster. For study purposes only.",
+  infoCmp:"Old vs New System",infoH:["","Old (~Sep 2025)","New (Oct 2025~)"],infoRows:[["Questions","10","50"],["Format","Illustrations + 2-choice","Text + True/False"],["Pass","7/10 (70%)","45/50 (90%)"],["Pass rate","~90%","~30-40%"]],
+  infoTips:"Tips for Passing",infoTipList:["Watch for absolute words: 'always','never','all'","Memorize sign shapes and colors accurately","Remember exact numbers (stopping distance, speed)","Understand intersection priority rules","Moped special rules (two-stage right turn, 30km/h)","Expressway special rules"],
+  forum:[{tag:"exp",title:"Passed on first try!",body:"Studied for 2 weeks using this site. The key is memorizing trick questions.",user:"Alex",time:"2h ago",replies:12},{tag:"help",title:"Which signs are most confusing?",body:"I keep mixing up No Parking vs No Stopping. Any tips?",user:"Yuki",time:"5h ago",replies:8},{tag:"tip",title:"Top 10 trick questions",body:"Here's my list of questions that tripped me up during practice...",user:"Chen",time:"1d ago",replies:23},{tag:"help",title:"Test center in Samezu?",body:"Has anyone taken the test at Samezu recently? How's the process?",user:"Maria",time:"2d ago",replies:15}],
+  faq:[{q:"How many questions are on the new test?",a:"The new format (Oct 2025) has 50 true/false questions. You need 45 correct (90%) to pass."},{q:"What languages are available?",a:"The official test is available in 21 languages. Our platform supports English, Japanese, and Chinese."},{q:"How is this different from the old test?",a:"The old test had 10 illustration-based questions. The new test has 50 text-based true/false questions, making it significantly harder."},{q:"Is this site free?",a:"Basic features are free. Sign gallery, sign quiz, and limited mock tests are available at no cost."}]
+},
+ja:{
+  nav_quiz:"テスト",nav_signs:"標識",nav_sq:"標識クイズ",nav_mq:"50問模擬テスト",nav_err:"間違いノート",nav_links:"学習リンク",nav_info:"試験情報",nav_buy:"車購入",nav_school:"自動車学校",nav_forum:"フォーラム",nav_cta:"クイズ開始",nav_pricing:"料金",
+  hero_badge:"2025年10月 新50問形式",hero_title:'日本の運転免許試験を<br><em>スマートに</em>合格しよう',hero_desc:"道路標識と交通ルールをクイズで攻略。外免切替50問模擬テスト対応。",hero_btn1:"無料でクイズ開始",hero_btn2:"詳しく見る",
+  stat1:"問題数",stat2:"合格ライン",stat3:"対応言語",
+  entry_label:"クイックスタート",entry_title:"学習モードを選択",entry_desc:"3つの方法で日本の運転免許試験を準備しましょう。",
+  e1_t:"標識一覧",e1_d:"カテゴリ別に全標識を確認できます。",e2_t:"標識クイズ",e2_d:"標識を見て正しい意味を選びましょう。",e3_t:"50問模擬テスト",e3_d:"2025年新制度対応の完全模擬テスト。",
+  info_label:"試験情報",info_title:"新旧制度比較",info_desc:"2025年10月施行の重要な変更点。",
+  cat_label:"カテゴリ",cat_title:"トピック別に練習",c1_t:"道路標識",c1_d:"5カテゴリ48標識",c2_t:"○×問題",c2_d:"本番形式で練習",c3_t:"模擬試験",c3_d:"50/25/10問モード",c4_t:"間違いノート",c4_d:"間違えた問題を復習",
+  pr_label:"料金",pr_title:"プランを選択",pr_desc:"無料で始めて、必要に応じてアップグレード。",pr_pop:"一番人気",
+  pr1_d:"まずはお試し",pr1_f1:"標識一覧",pr1_f2:"標識クイズ(10問)",pr1_f3:"3言語対応",pr1_btn:"無料で開始",
+  pr2_d:"本気で試験対策",pr2_f1:"模擬テスト無制限",pr2_f2:"間違いノート",pr2_f3:"詳細な解説",pr2_f4:"広告なし",pr2_btn:"無料トライアル",
+  pr3_d:"フルアクセス",pr3_f1:"Proの全機能",pr3_f2:"500問以上追加",pr3_f3:"個別サポート",pr3_btn:"お問い合わせ",
+  fm_label:"コミュニティ",fm_title:"運転免許フォーラム",fm_desc:"体験を共有し、助け合いましょう。",
+  faq_title:"よくある質問",
+  back:"戻る",
+  sqTitle:"道路標識クイズ",sqDesc:"標識を見て正しい意味を選びましょう",
+  mqTitle:"外免切替 50問模擬テスト",mqDesc:"2025年10月新制度 / 合格: 45問以上 (90%)",
+  modes:["全50問","ランダム25問","ランダム10問"],
+  lkTitle:"学習リソース",lkDesc:"外免切替試験に役立つサイト",
+  errTitle:"間違いノート",errDesc:"間違えた問題を復習しましょう",errEmpty:"間違いはまだありません。練習を続けましょう。",
+  qWhat:"この標識の意味は？",next:"次の問題",retry:"もう一度",pass:"合格!",fail:"不合格",score:"正答率",passLine:"合格ライン",correct:"正解",close:"閉じる",trueL:"正しい (O)",falseL:"誤り (X)",
+  cats:["規制標識","警戒標識","指示標識","案内標識","補助標識"],
+  ft_brand:"日本運転免許外免切替試験の総合学習ツール。学習目的のみ。",ft_study:"学習",ft_services:"サービス",ft_info:"情報",ft_resources:"学習リソース",ft_contact:"お問い合わせ",ft_copy:"&copy; 2025 DriveMaster. 学習目的のみ。最新情報は公式サイトをご確認ください。",
+  infoCmp:"新旧制度比較",infoH:["","旧制度(~2025.9)","新制度(2025.10~)"],infoRows:[["問題数","10問","50問"],["形式","イラスト+2択","文章+○×"],["合格基準","7/10(70%)","45/50(90%)"],["合格率","約90%","約30~40%"]],
+  infoTips:"合格のコツ",infoTipList:["「必ず」「すべて」等の絶対表現に注意","標識の形・色の違いを正確に覚える","数値を正確に記憶(停止距離、速度等)","交差点の優先順位ルールを理解","原付の特殊ルール(二段階右折、30km/h)","高速道路の特別ルール"],
+  forum:[{tag:"exp",title:"一発合格しました！",body:"このサイトで2週間勉強。ひっかけ問題を覚えるのがカギです。",user:"Alex",time:"2時間前",replies:12},{tag:"help",title:"紛らわしい標識は？",body:"駐車禁止と駐停車禁止をいつも間違えます。コツはありますか？",user:"Yuki",time:"5時間前",replies:8},{tag:"tip",title:"ひっかけ問題トップ10",body:"練習中に引っかかった問題リストを共有します...",user:"Chen",time:"1日前",replies:23},{tag:"help",title:"鮫洲の試験場について",body:"最近鮫洲で受験した方いますか？流れを教えてください。",user:"Maria",time:"2日前",replies:15}],
+  faq:[{q:"新制度の問題数は？",a:"2025年10月からの新制度では50問の○×問題です。45問以上正解(90%)で合格。"},{q:"対応言語は？",a:"公式試験は21言語対応。当サイトは日本語・英語・中国語の3言語対応。"},{q:"旧制度との違いは？",a:"旧制度はイラスト10問。新制度は文章50問の○×形式で、大幅に難しくなりました。"},{q:"無料で使えますか？",a:"基本機能は無料。標識一覧、標識クイズ、限定的な模擬テストが無料で利用できます。"}]
+},
+zh:{
+  nav_quiz:"测验",nav_signs:"标识",nav_sq:"标识测验",nav_mq:"50题模拟考试",nav_err:"错题本",nav_links:"学习链接",nav_info:"考试信息",nav_buy:"买车",nav_school:"驾校",nav_forum:"论坛",nav_cta:"开始答题",nav_pricing:"价格",
+  hero_badge:"2025年10月 新50题形式",hero_title:'<em>智能备考</em><br>日本驾照换证考试',hero_desc:"通过题库掌握日本道路标识和交通规则。50题模拟考试完全对应新制度。",hero_btn1:"免费开始答题",hero_btn2:"了解更多",
+  stat1:"题目数",stat2:"合格线",stat3:"种语言",
+  entry_label:"快速开始",entry_title:"选择学习模式",entry_desc:"三种方式备考日本驾照换证考试。",
+  e1_t:"标识一览",e1_d:"按分类浏览所有日本道路标识。",e2_t:"标识测验",e2_d:"看标识选择正确含义。",e3_t:"50题模拟",e3_d:"完全对应2025年新制度模拟考试。",
+  info_label:"考试信息",info_title:"新旧制度对比",info_desc:"2025年10月生效的重要变化。",
+  cat_label:"分类",cat_title:"按主题练习",c1_t:"道路标识",c1_d:"5类48个标识",c2_t:"判断题",c2_d:"正式考试形式",c3_t:"模拟考试",c3_d:"50/25/10题模式",c4_t:"错题本",c4_d:"复习做错的题",
+  pr_label:"价格",pr_title:"选择方案",pr_desc:"免费开始，按需升级。",pr_pop:"最受欢迎",
+  pr1_d:"入门体验",pr1_f1:"标识一览",pr1_f2:"标识测验(10题)",pr1_f3:"3种语言",pr1_btn:"免费开始",
+  pr2_d:"认真备考",pr2_f1:"无限模拟考试",pr2_f2:"错题本",pr2_f3:"详细解析",pr2_f4:"无广告",pr2_btn:"免费试用",
+  pr3_d:"完全访问",pr3_f1:"包含Pro全部功能",pr3_f2:"500+额外题目",pr3_f3:"一对一辅导",pr3_btn:"联系我们",
+  fm_label:"社区",fm_title:"驾考论坛",fm_desc:"分享经验，互相帮助。",
+  faq_title:"常见问题",
+  back:"返回",
+  sqTitle:"道路标识测验",sqDesc:"看标识选择正确含义",
+  mqTitle:"外国驾照换证 50题模拟",mqDesc:"2025年10月新制度 / 合格线: 45题以上 (90%)",
+  modes:["全部50题","随机25题","随机10题"],
+  lkTitle:"学习资源",lkDesc:"有助于考试的学习网站",
+  errTitle:"错题本",errDesc:"复习做错的题目",errEmpty:"还没有错题，继续练习吧！",
+  qWhat:"这个标识是什么意思？",next:"下一题",retry:"再试一次",pass:"合格!",fail:"不合格",score:"正确率",passLine:"合格线",correct:"正确",close:"关闭",trueL:"正确 (O)",falseL:"错误 (X)",
+  cats:["规制标识","警告标识","指示标识","引导标识","辅助标识"],
+  ft_brand:"日本驾照换证考试综合学习工具。仅供学习使用。",ft_study:"学习",ft_services:"服务",ft_info:"信息",ft_resources:"学习资源",ft_contact:"联系我们",ft_copy:"&copy; 2025 DriveMaster. 仅供学习使用。最新信息请查阅官方网站。",
+  infoCmp:"新旧制度对比",infoH:["","旧制度(~2025.9)","新制度(2025.10~)"],infoRows:[["题数","10题","50题"],["形式","插图+2选1","文字+判断"],["合格标准","7/10(70%)","45/50(90%)"],["合格率","约90%","约30~40%"]],
+  infoTips:"通过技巧",infoTipList:["注意「必须」「所有」等绝对表述","准确记忆标识的形状和颜色","牢记数字(停车距离、速度限制等)","理解路口优先权规则","助力车特殊规则(两段式右转、30km/h)","高速公路特别规则"],
+  forum:[{tag:"exp",title:"一次通过了！",body:"用这个网站学了两周，关键是记住陷阱题。",user:"Alex",time:"2小时前",replies:12},{tag:"help",title:"最容易混淆的标识？",body:"我总是分不清禁止停车和禁止临时停车，有什么技巧吗？",user:"Yuki",time:"5小时前",replies:8},{tag:"tip",title:"十大陷阱题",body:"分享一下练习中最容易出错的题目...",user:"Chen",time:"1天前",replies:23},{tag:"help",title:"�的场考场怎么样？",body:"最近有人在�的场考过吗？流程是怎样的？",user:"Maria",time:"2天前",replies:15}],
+  faq:[{q:"新制度有多少题？",a:"2025年10月起新制度为50道判断题，答对45题以上(90%)合格。"},{q:"支持什么语言？",a:"官方考试支持21种语言。本网站支持中文、日语、英语三种语言。"},{q:"和旧制度有什么区别？",a:"旧制度是10道插图题，新制度是50道文字判断题，难度大幅增加。"},{q:"可以免费使用吗？",a:"基本功能免费。标识一览、标识测验和部分模拟考试均可免费使用。"}]
+}};
+function t(k){return I[lang][k]||I.en[k]||k}
+
+// ========== Sign Data ==========
+var W='https://upload.wikimedia.org/wikipedia/commons/';
+var signs={
+reg:[
+{id:"r1",img:W+"2/2d/Japan_road_sign_301.svg",n:{ja:"通行止め",zh:"禁止通行",en:"Road Closed"},d:{ja:"歩行者・車・路面電車すべて通行禁止",zh:"禁止所有行人、车辆和电车通行",en:"No passage for pedestrians, vehicles, or trams"}},
+{id:"r2",img:W+"7/7a/Japan_road_sign_302.svg",n:{ja:"車両通行止め",zh:"禁止车辆通行",en:"No Vehicles"},d:{ja:"車両は通行できません。歩行者は可能",zh:"禁止车辆通行，行人可通行",en:"No vehicles allowed. Pedestrians OK"}},
+{id:"r3",img:W+"6/69/Japan_road_sign_303.svg",n:{ja:"車両進入禁止",zh:"禁止车辆驶入",en:"No Entry"},d:{ja:"一方通行の出口に設置。車両進入禁止",zh:"设置在单行道出口处，禁止车辆驶入",en:"At one-way exits. No vehicle entry"}},
+{id:"r4",img:W+"3/32/Japan_road_sign_304.svg",n:{ja:"自動車通行止め",zh:"禁止汽车通行",en:"No Cars"},d:{ja:"二輪車以外の自動車は通行禁止",zh:"除两轮车外的汽车禁止通行",en:"No cars except motorcycles"}},
+{id:"r5",img:W+"2/29/Japan_road_sign_305.svg",n:{ja:"大型貨物通行止め",zh:"禁止大型货车通行",en:"No Large Trucks"},d:{ja:"大型貨物自動車の通行禁止",zh:"禁止大型货车通行",en:"No large trucks"}},
+{id:"r6",img:W+"3/3b/Japan_road_sign_306.svg",n:{ja:"二輪の自動車・原付通行止め",zh:"禁止摩托车和助力车通行",en:"No Motorcycles/Mopeds"},d:{ja:"自動二輪車と原動機付自転車の通行禁止",zh:"禁止摩托车和助力车通行",en:"No motorcycles or mopeds allowed"}},
+{id:"r7",img:W+"3/35/Japan_road_sign_309.svg",n:{ja:"自転車通行止め",zh:"禁止自行车通行",en:"No Bicycles"},d:{ja:"自転車の通行を禁止",zh:"禁止自行车通行",en:"No bicycles"}},
+{id:"r8",img:W+"e/ee/Japan_road_sign_331.svg",n:{ja:"歩行者通行止め",zh:"禁止行人通行",en:"No Pedestrians"},d:{ja:"歩行者の通行を禁止",zh:"禁止行人通行",en:"No pedestrians"}},
+{id:"r9",img:W+"7/70/Japan_road_sign_311-A-L.svg",n:{ja:"指定方向外進行禁止",zh:"禁止指定方向外行驶",en:"Designated Direction Only"},d:{ja:"矢印の方向以外への進行を禁止",zh:"禁止向箭头以外的方向行驶",en:"Only proceed in the arrow direction"}},
+{id:"r10",img:W+"1/1e/Japan_road_sign_312.svg",n:{ja:"車両横断禁止",zh:"禁止车辆横穿",en:"No Crossing"},d:{ja:"道路を横断して施設に入ることを禁止",zh:"禁止横穿道路进入设施",en:"No crossing the road to enter facilities"}},
+{id:"r11",img:W+"8/8a/Japan_road_sign_313.svg",n:{ja:"転回禁止",zh:"禁止掉头",en:"No U-Turn"},d:{ja:"Uターン禁止",zh:"禁止U型掉头",en:"U-turn prohibited"}},
+{id:"r12",img:W+"7/78/Japan_road_sign_314.svg",n:{ja:"追越し禁止",zh:"禁止超车",en:"No Overtaking"},d:{ja:"追越しのための右側はみ出し禁止",zh:"禁止为超车而驶入对向车道",en:"No overtaking by crossing center line"}},
+{id:"r13",img:W+"1/1a/Japan_road_sign_315.svg",n:{ja:"駐停車禁止",zh:"禁止停车和临时停车",en:"No Stopping/Parking"},d:{ja:"駐車と停車の両方を禁止",zh:"禁止停车和临时停车",en:"No stopping or parking"}},
+{id:"r14",img:W+"3/35/Japan_road_sign_316.svg",n:{ja:"駐車禁止",zh:"禁止停车",en:"No Parking"},d:{ja:"駐車を禁止。停車は可能",zh:"禁止停车，临时停车可以",en:"No parking. Brief stops OK"}},
+{id:"r15",img:W+"1/1c/Japan_road_sign_323_%2830%29.svg",n:{ja:"最高速度 30km/h",zh:"最高速度30km/h",en:"Speed Limit 30"},d:{ja:"30km/hを超えて運転してはいけません",zh:"不得超过30km/h",en:"Do not exceed 30 km/h"}},
+{id:"r16",img:W+"7/74/Japan_road_sign_323_%2850%29.svg",n:{ja:"最高速度 50km/h",zh:"最高速度50km/h",en:"Speed Limit 50"},d:{ja:"50km/hを超えて運転してはいけません",zh:"不得超过50km/h",en:"Do not exceed 50 km/h"}},
+{id:"r17",img:W+"1/14/Japan_road_sign_324_%2850%29.svg",n:{ja:"最低速度 50km/h",zh:"最低速度50km/h",en:"Minimum Speed 50"},d:{ja:"50km/h未満で運転してはいけません",zh:"不得低于50km/h行驶",en:"Must drive at least 50 km/h"}},
+{id:"r18",img:W+"9/91/Japan_road_sign_326-A-L.svg",n:{ja:"一方通行",zh:"单行道",en:"One Way"},d:{ja:"矢印の方向にのみ通行可能",zh:"只能按箭头方向行驶",en:"Traffic flows in one direction only"}},
+{id:"r19",img:W+"a/ae/Japan_road_sign_330-B.svg",n:{ja:"一時停止",zh:"停车",en:"Stop"},d:{ja:"必ず停止しなければなりません",zh:"必须停车",en:"You must stop completely"}},
+{id:"r20",img:W+"7/74/Japan_road_sign_329-B.svg",n:{ja:"徐行",zh:"慢行",en:"Slow Down"},d:{ja:"徐行しなければなりません",zh:"必须慢行",en:"Must drive slowly"}},
+{id:"r21",img:W+"b/b5/Japan_road_sign_320.svg",n:{ja:"重量制限",zh:"重量限制",en:"Weight Limit"},d:{ja:"表示された重量を超える車両は通行禁止",zh:"超过标示重量的车辆禁止通行",en:"No vehicles exceeding indicated weight"}},
+{id:"r22",img:W+"1/11/Japan_road_sign_321.svg",n:{ja:"高さ制限",zh:"高度限制",en:"Height Limit"},d:{ja:"表示された高さを超える車両は通行禁止",zh:"超过标示高度的车辆禁止通行",en:"No vehicles exceeding indicated height"}},
+],
+warn:[
+{id:"w1",img:W+"a/ad/Japan_road_sign_201-A.svg",n:{ja:"十形交差点あり",zh:"十字路口",en:"Crossroad"},d:{ja:"前方に十字路の交差点があります",zh:"前方有十字路口",en:"Crossroad ahead"}},
+{id:"w2",img:W+"9/93/Japan_road_sign_203-L.svg",n:{ja:"右方屈曲あり",zh:"右弯",en:"Curve Right"},d:{ja:"前方に右カーブがあります",zh:"前方有右弯道",en:"Right curve ahead"}},
+{id:"w3",img:W+"1/12/Japan_road_sign_205-L.svg",n:{ja:"右方屈折あり",zh:"急弯",en:"Sharp Turn"},d:{ja:"前方に急な屈折があります",zh:"前方有急弯",en:"Sharp turn ahead"}},
+{id:"w4",img:W+"2/2f/Japan_road_sign_207-A.svg",n:{ja:"踏切あり",zh:"铁道口",en:"Railway Crossing"},d:{ja:"前方に踏切があります",zh:"前方有铁道口",en:"Railway crossing ahead"}},
+{id:"w5",img:W+"a/a2/Japan_road_sign_208-2.svg",n:{ja:"信号機あり",zh:"信号灯",en:"Traffic Signal"},d:{ja:"前方に信号機があります",zh:"前方有交通信号灯",en:"Traffic signal ahead"}},
+{id:"w6",img:W+"4/40/Japan_road_sign_209.svg",n:{ja:"すべりやすい",zh:"路面湿滑",en:"Slippery"},d:{ja:"路面がすべりやすくなっています",zh:"路面容易打滑",en:"Slippery road surface"}},
+{id:"w7",img:W+"0/0d/Japan_road_sign_210.svg",n:{ja:"落石のおそれ",zh:"落石",en:"Falling Rocks"},d:{ja:"落石の危険があります",zh:"有落石危险",en:"Risk of falling rocks"}},
+{id:"w8",img:W+"5/57/Japan_road_sign_212.svg",n:{ja:"幅員減少",zh:"道路变窄",en:"Road Narrows"},d:{ja:"前方で道路幅が狭くなります",zh:"前方道路变窄",en:"Road narrows ahead"}},
+{id:"w9",img:W+"e/e8/Japan_road_sign_212-2.svg",n:{ja:"上り急勾配",zh:"陡坡上行",en:"Steep Uphill"},d:{ja:"前方に急な上り坂があります",zh:"前方有陡峭上坡",en:"Steep uphill ahead"}},
+{id:"w10",img:W+"b/b7/Japan_road_sign_212-3.svg",n:{ja:"下り急勾配",zh:"陡坡下行",en:"Steep Downhill"},d:{ja:"前方に急な下り坂があります",zh:"前方有陡峭下坡",en:"Steep downhill ahead"}},
+{id:"w11",img:W+"1/13/Japan_road_sign_211.svg",n:{ja:"車線数減少",zh:"车道数减少",en:"Lane Reduction"},d:{ja:"前方で車線数が減少します",zh:"前方车道数减少",en:"Lanes decrease ahead"}},
+{id:"w12",img:W+"1/19/Japan_road_sign_214.svg",n:{ja:"横風注意",zh:"侧风",en:"Side Wind"},d:{ja:"強い横風に注意",zh:"注意强侧风",en:"Beware of strong side winds"}},
+{id:"w13",img:W+"f/f9/Japan_road_sign_215.svg",n:{ja:"その他の危険",zh:"其他危险",en:"Other Dangers"},d:{ja:"この先に危険な箇所があります",zh:"前方有危险路段",en:"Danger ahead. Drive with caution"}},
+{id:"w14",img:W+"8/84/Japan_road_sign_208.svg",n:{ja:"学校あり",zh:"注意学校",en:"School Zone"},d:{ja:"付近に学校があります",zh:"附近有学校",en:"School nearby"}},
+],
+inst:[
+{id:"i1",img:W+"5/5d/Japan_road_sign_407-B.svg",n:{ja:"横断歩道",zh:"人行横道",en:"Ped. Crossing"},d:{ja:"横断歩道があります",zh:"此处有人行横道",en:"Pedestrian crossing here"}},
+{id:"i2",img:W+"e/ef/Japan_road_sign_407-3.svg",n:{ja:"自転車横断帯",zh:"自行车过道",en:"Bicycle Crossing"},d:{ja:"自転車横断帯があります",zh:"此处有自行车过道",en:"Bicycle crossing here"}},
+{id:"i3",img:W+"0/02/Japan_road_sign_403_and_503-D.svg",n:{ja:"駐車可",zh:"可以停车",en:"Parking OK"},d:{ja:"駐車ができます",zh:"允许停车",en:"Parking permitted"}},
+{id:"i4",img:W+"3/3c/Japan_road_sign_404.svg",n:{ja:"停車可",zh:"可以临时停车",en:"Stopping OK"},d:{ja:"停車ができます",zh:"允许临时停车",en:"Stopping permitted"}},
+{id:"i5",img:W+"5/5a/Japan_road_sign_401.svg",n:{ja:"並進可",zh:"允许并行",en:"Riding Abreast OK"},d:{ja:"自転車は並んで走行できます",zh:"自行车可以并排行驶",en:"Bicycles may ride side by side"}},
+{id:"i8",img:W+"c/cf/Japan_road_sign_405.svg",n:{ja:"優先道路",zh:"优先道路",en:"Priority Road"},d:{ja:"この道路が優先道路です",zh:"此道路为优先道路",en:"This is a priority road"}},
+{id:"i6",img:W+"6/66/Japan_road_sign_406.svg",n:{ja:"中央線",zh:"中央线",en:"Center Line"},d:{ja:"道路の中央を示します",zh:"表示道路中央",en:"Indicates the center of the road"}},
+{id:"i7",img:W+"7/7b/Japan_road_sign_408.svg",n:{ja:"安全地帯",zh:"安全地带",en:"Safety Zone"},d:{ja:"安全地帯を示します",zh:"表示安全地带",en:"Indicates a safety zone"}},
+],
+guide:[{id:"g1",img:W+"9/93/Japanese_National_Route_Sign_0001.svg",n:{ja:"国道番号",zh:"国道编号",en:"National Route"},d:{ja:"国道の番号を示します",zh:"表示国道编号",en:"Shows the national route number"}}],
+aux:[
+{id:"a1",img:W+"c/c7/Japan_road_sign_503-C.svg",n:{ja:"日曜・休日を除く",zh:"周日和节假日除外",en:"Except Sun/Holidays"},d:{ja:"日曜日と休日には規制が適用されません",zh:"周日和节假日不适用该规定",en:"Regulation does not apply on Sundays/holidays"}},
+{id:"a2",img:W+"d/dd/Japan_road_sign_505-A.svg",n:{ja:"始まり",zh:"起点",en:"Zone Begins"},d:{ja:"規制区間の始まり",zh:"管制区间起点",en:"Start of regulated zone"}},
+{id:"a3",img:W+"3/35/Japan_road_sign_507-A.svg",n:{ja:"終わり",zh:"终点",en:"Zone Ends"},d:{ja:"規制区間の終わり",zh:"管制区间终点",en:"End of regulated zone"}},
+]};
+
+// ========== 50 Mock Questions ==========
+var MQ=[
+{q:{ja:"初心者マークは、運転に自信がある人はつけなくてもよい。",zh:"如果对驾驶有自信，新手标志可以不贴。",en:"If confident in driving, you don't need the beginner mark."},a:false,exp:{ja:"免許取得後1年未満は初心者マーク表示義務があります。",zh:"取得驾照不满1年必须贴新手标志。",en:"Beginner mark is mandatory for the first year."}},
+{q:{ja:"横断歩道の手前30メートル以内では、追い越しや追い抜きをしてはいけない。",zh:"人行横道前方30米以内禁止超车。",en:"Overtaking is prohibited within 30m of a pedestrian crossing."},a:true,exp:{ja:"横断歩道の手前30m以内は追越し・追い抜き禁止です。",zh:"人行横道前30m内禁止超车和抢道。",en:"Overtaking prohibited within 30m of crossings."}},
+{q:{ja:"高速道路で時速100キロで走行するとき、車間距離は100メートル以上が目安。",zh:"在高速公路以100km/h行驶时，车间距应保持100米以上。",en:"At 100km/h on expressways, keep 100m+ following distance."},a:true,exp:{ja:"速度(km/h)と同じ数値(m)以上の車間距離が目安です。",zh:"车间距(m)应不少于速度(km/h)的数值。",en:"Following distance (m) should match speed (km/h)."}},
+{q:{ja:"後方から追越しをしようとする車があるときは、速度を上げて追越しをさせないようにする。",zh:"后方有车要超车时，应加速不让其超车。",en:"When a car behind tries to overtake, speed up to prevent it."},a:false,exp:{ja:"追越しをしようとする車には左に寄って道を譲ります。",zh:"应靠左让路给要超车的车辆。",en:"Move left and give way to overtaking vehicles."}},
+{q:{ja:"故障で高速道路に停車するときは、車の後方に停止表示器材を置く。",zh:"因故障在高速公路停车时，要在车后放置停车警示器材。",en:"When stopping on expressway due to breakdown, place warning device behind."},a:true,exp:{ja:"高速道路での停車時は停止表示器材の設置が義務です。",zh:"高速公路停车时必须设置停车警示器材。",en:"Warning devices mandatory when stopped on expressways."}},
+{q:{ja:"高速道路の路側帯は、疲れたときに停車して休憩してもよい。",zh:"高速公路的路肩可以在疲劳时停车休息。",en:"You may stop and rest on expressway shoulder when tired."},a:false,exp:{ja:"路側帯は駐停車禁止。サービスエリアで休憩してください。",zh:"路肩禁止停车。请到服务区休息。",en:"Shoulder is no-stopping. Use service areas."}},
+{q:{ja:"交通整理の行われていない交差点では、道幅が同じなら左方から来る車が優先。",zh:"在没有交通管制的路口，路幅相同时左方来车优先。",en:"At uncontrolled intersections with equal roads, left has priority."},a:true,exp:{ja:"道幅が同じ交差点では「左方優先」のルールがあります。",zh:"路幅相同的路口适用'左方优先'规则。",en:"'Left-side priority' rule at equal-width intersections."}},
+{q:{ja:"対向車があっても、右折する場合は直進車より優先して通行できる。",zh:"即使有对向车，右转时也可以优先于直行车通行。",en:"Right-turning vehicles have priority over straight-going ones."},a:false,exp:{ja:"右折車は直進車・左折車に道を譲らなければなりません。",zh:"右转车必须让直行车和左转车先行。",en:"Right-turning must yield to straight and left-turning."}},
+{q:{ja:"歩行者が横断歩道の途中で立ち止まっていたら、注意しながらそのまま通過してよい。",zh:"行人在人行横道中途停下时，可以注意通过。",en:"If a pedestrian stops mid-crossing, you may pass carefully."},a:false,exp:{ja:"歩行者がいる場合は必ず一時停止して優先させます。",zh:"有行人时必须停车让行人优先。",en:"Must stop and yield to pedestrians on crossings."}},
+{q:{ja:"原動機付自転車は二人乗りをすることができない。",zh:"助力车（50cc以下）不可以载人。",en:"Mopeds (50cc or less) cannot carry passengers."},a:true,exp:{ja:"50cc以下の原付は乗車定員1名です。",zh:"50cc以下助力车定员1人。",en:"Mopeds under 50cc: 1 rider only."}},
+{q:{ja:"車を運転するときは、走行前に日常点検を行ったほうがよい。",zh:"驾车前应进行日常检查。",en:"You should perform daily checks before driving."},a:true,exp:{ja:"日常点検は安全運転の基本です。",zh:"日常检查是安全驾驶的基本。",en:"Daily checks are fundamental to safe driving."}},
+{q:{ja:"夜間走行中は近くに注意を集中し、手元をよく見て運転したほうが安全。",zh:"夜间行驶时应集中注意近处更安全。",en:"At night, focus on nearby objects for safety."},a:false,exp:{ja:"夜間はできるだけ遠くを見て前方の状況を早めに把握します。",zh:"夜间应尽量远看，提前掌握前方情况。",en:"At night, look as far ahead as possible."}},
+{q:{ja:"速度が速くなるほど、近くのものは見えにくくなる。",zh:"速度越快，越难看清近处的东西。",en:"The faster you go, the harder to see nearby objects."},a:true,exp:{ja:"速度が上がると視野が狭くなり近くの物が見えにくくなります。",zh:"速度提高会使视野变窄。",en:"Higher speed narrows field of vision (tunnel vision)."}},
+{q:{ja:"荷物が方向指示器やブレーキランプを覆っても、確認すれば問題ない。",zh:"即使货物遮住了转向灯和刹车灯，只要确认就没问题。",en:"Even if cargo covers indicators, it's OK if you check."},a:false,exp:{ja:"灯火類が見えない状態での運転は禁止です。",zh:"灯光被遮挡的状态下禁止驾驶。",en:"Driving with obscured lights is prohibited."}},
+{q:{ja:"高速道路では、やむを得ない場合でも後退してはならない。",zh:"在高速公路上，即使不得已也不可以倒车。",en:"On expressways, reversing is prohibited even if unavoidable."},a:true,exp:{ja:"高速道路での後退は禁止です。",zh:"高速公路禁止倒车。",en:"Reversing on expressways is always prohibited."}},
+{q:{ja:"バス停に停車していたバスが発進の合図をしたとき、後方の車はバスの発進を妨げてはならない。",zh:"公交车在站点发出起步信号时，后方车辆不得妨碍其起步。",en:"When a bus signals to depart, vehicles behind must not obstruct."},a:true,exp:{ja:"路線バスの発進を妨害してはいけません。",zh:"不得妨碍公交车起步。",en:"Do not obstruct bus departures."}},
+{q:{ja:"山道で行き違うとき、がけ側の車が一時停止して谷側の車に道を譲る。",zh:"在山路会车时，靠悬崖一侧的车停车让靠山谷一侧的车先行。",en:"On mountain roads, cliff-side car stops and yields to valley-side."},a:false,exp:{ja:"谷側の車が停止してがけ側の車に道を譲ります。",zh:"靠山谷一侧的车应停车让靠悬崖一侧的车先行。",en:"Valley-side car stops and yields to cliff-side car."}},
+{q:{ja:"荷物を多く積んだ車は、空車のときよりも制動距離が短くなる。",zh:"装载很多货物的车比空车的制动距离更短。",en:"A heavily loaded vehicle has shorter braking distance."},a:false,exp:{ja:"荷物が重いほど制動距離は長くなります。",zh:"载重越重，制动距离越长。",en:"Heavier loads = longer braking distances."}},
+{q:{ja:"ブレーキをかけてから車が停止するまでの間は、空走距離と制動距離がある。",zh:"从踩刹车到车停下，包括空走距离和制动距离。",en:"From braking to stopping: reaction distance + braking distance."},a:true,exp:{ja:"停止距離＝空走距離＋制動距離です。",zh:"停车距离=空走距离+制动距离。",en:"Stopping distance = reaction + braking distance."}},
+{q:{ja:"赤信号でも左折の青矢印が出ていれば、軽車両も左折できる。",zh:"红灯时如果有左转绿色箭头，轻型车辆也可以左转。",en:"At red with green left arrow, light vehicles can turn left."},a:false,exp:{ja:"青矢印信号では軽車両は進行できません。",zh:"绿色箭头信号时轻型车辆不能通行。",en:"Light vehicles cannot proceed on arrow signals."}},
+];
+
+// ========== Links ==========
+var links=[
+{t:"Lease Japan - 50Q Mock Test",d:{ja:"外免切替50問の完全模擬テスト。英語対応。",zh:"外国驾照换证50题完整模拟考试。",en:"Full 50-question mock test for license conversion."},u:"https://leasejapan.com/en/license-conversion/written-test-guide/",b:["b-free","b-new"]},
+{t:"Drivey (Ziplus) - AI App",d:{ja:"外免切替専用AI学習アプリ。",zh:"外国驾照换证AI学习应用。",en:"AI study app for license conversion."},u:"https://ziplus.jp/switching_license/en/tips/written-test/gaimen-chisiki/",b:["b-app","b-new"]},
+{t:"JAF - Traffic Rules Quiz",d:{ja:"日本自動車連盟公式の交通ルールクイズ。",zh:"日本汽车联盟官方交通规则测验。",en:"Official JAF traffic rules quiz."},u:"https://english.jaf.or.jp/safe-driving/quiz",b:["b-off","b-free"]},
+{t:"Japan DrivExam",d:{ja:"仮免・本免の模擬試験。",zh:"临时驾照和正式驾照模拟考试。",en:"Practice tests for provisional and full license."},u:"https://www.japan.drivexam.com/",b:["b-free"]},
+{t:"traffic-rules.com",d:{ja:"500問以上の練習問題。",zh:"500道以上练习题。",en:"500+ practice questions."},u:"https://traffic-rules.com/en/japan/practice-test",b:["b-free"]},
+{t:"NihonDrive",d:{ja:"ひっかけ問題対策、模擬試験。",zh:"陷阱题对策和模拟考试。",en:"Trick question prep and mock exams."},u:"https://nihondrive.com/",b:["b-free"]},
+{t:{ja:"国土交通省 - 標識一覧PDF",zh:"国土交通省 - 标识一览PDF",en:"MLIT - Signs List PDF"},d:{ja:"公式の道路標識全種類PDF。",zh:"官方道路标识全类别PDF。",en:"Official road signs PDF."},u:"https://www.mlit.go.jp/road/sign/sign/douro/ichiran.pdf",b:["b-off"]},
+{t:{ja:"警視庁 - 外国語学科試験",zh:"警视厅 - 外语学科考试",en:"Tokyo Police - Foreign Language Exam"},d:{ja:"21言語対応の学科試験情報。",zh:"支持21种语言的学科考试信息。",en:"Exam info in 21 languages."},u:"https://www.keishicho.metro.tokyo.lg.jp/menkyo/menkyo/foreign_exam.html",b:["b-off"]},
+];
+
+// ========== Error Notebook ==========
+var wrongAnswers=JSON.parse(localStorage.getItem('dm_errors')||'[]');
+function saveErrors(){localStorage.setItem('dm_errors',JSON.stringify(wrongAnswers))}
+function addError(q){if(!wrongAnswers.find(function(e){return e.q.en===q.q.en})){wrongAnswers.push(q);saveErrors()}}
+function removeError(i){wrongAnswers.splice(i,1);saveErrors();renderErrors()}
+function renderErrors(){
+  var a=document.getElementById('err-area');
+  if(!wrongAnswers.length){a.innerHTML='<div class="err-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><p>'+t('errEmpty')+'</p></div>';return}
+  a.innerHTML=wrongAnswers.map(function(e,i){return '<div class="err-item"><div class="err-q">'+(e.q[lang]||e.q.en)+'</div><div class="err-a">'+(e.a?t('trueL'):t('falseL'))+' — '+(e.exp[lang]||e.exp.en)+'</div><button class="err-retry" onclick="removeError('+i+')">'+t('close')+'</button></div>'}).join('');
+}
+
+// ========== Render Functions ==========
+function drawSign(s,big){return '<img class="'+(big?'sign-img-big':'sign-img')+'" src="'+s.img+'" alt="sign" loading="lazy">'}
+function renderGallery(){
+  var cats=[{k:'reg',ci:0},{k:'warn',ci:1},{k:'inst',ci:2},{k:'guide',ci:3},{k:'aux',ci:4}];
+  var html='';
+  cats.forEach(function(c){
+    html+='<h3 class="cat-title">'+t('cats')[c.ci]+'</h3><div class="sg">'+signs[c.k].map(function(s){return '<div class="sc" onclick="showSign(\''+c.k+'\',\''+s.id+'\')">'+drawSign(s)+'<div class="sn">'+(s.n[lang]||s.n.en)+'</div></div>'}).join('')+'</div>';
+  });
+  document.getElementById('signs-area').innerHTML=html;
+}
+function showSign(cat,id){
+  var s=signs[cat].find(function(x){return x.id===id});if(!s)return;
+  document.getElementById('modal-c').innerHTML=drawSign(s,true)+'<h3>'+(s.n[lang]||s.n.en)+'</h3><div class="me">'+(s.n.en||'')+'</div><p>'+(s.d[lang]||s.d.en)+'</p><button class="mcl" onclick="document.getElementById(\'modal\').classList.remove(\'on\')">'+t('close')+'</button>';
+  document.getElementById('modal').classList.add('on');
+}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===e.currentTarget)e.target.classList.remove('on')});
+
+// ========== Sign Quiz ==========
+var sq={qs:[],ci:0,sc:0};
+var allSigns=[].concat(signs.reg,signs.warn,signs.inst,signs.guide);
+function startSignQuiz(){
+  var pool=[].concat(signs.reg,signs.warn,signs.inst).sort(function(){return Math.random()-.5}).slice(0,10);
+  sq={qs:[],ci:0,sc:0};
+  pool.forEach(function(cs){
+    var wrong=allSigns.filter(function(s){return s.id!==cs.id}).sort(function(){return Math.random()-.5}).slice(0,3);
+    var opts=[cs].concat(wrong).sort(function(){return Math.random()-.5});
+    sq.qs.push({sign:cs,opts:opts,ci:opts.indexOf(cs)});
+  });
+  renderSQ();
+}
+function renderSQ(){
+  var a=document.getElementById('sq-area');
+  if(sq.ci>=sq.qs.length){var p=Math.round(sq.sc/sq.qs.length*100);a.innerHTML='<div class="rc"><div class="rs">'+sq.sc+'<span>/'+sq.qs.length+'</span></div><div class="rl">'+t('score')+': '+p+'%</div><div class="rp '+(p>=90?'pass':'fail')+'">'+(p>=90?t('pass'):t('fail'))+'</div><br><button class="rbtn" onclick="startSignQuiz()">'+t('retry')+'</button></div>';return}
+  var q=sq.qs[sq.ci],lb=['A','B','C','D'];
+  document.getElementById('sq-scr').textContent=sq.sc+' '+t('correct');
+  document.getElementById('sq-num').textContent=(sq.ci+1)+'/'+sq.qs.length;
+  document.getElementById('sq-bar').style.width=(sq.ci/sq.qs.length*100)+'%';
+  var ci=q.ci;
+  a.innerHTML='<div class="qc"><span class="qn">'+(sq.ci+1)+'</span><div class="qi">'+drawSign(q.sign,true)+'</div><div class="qt">'+t('qWhat')+'</div><div class="opts">'+q.opts.map(function(o,i){return '<button class="ob" onclick="ansSQ('+i+','+ci+')" id="sqo'+i+'"><span class="ol">'+lb[i]+'</span><span>'+(o.n[lang]||o.n.en)+'</span></button>'}).join('')+'</div><div class="exp" id="sqExp">'+(q.sign.d[lang]||q.sign.d.en)+'</div><button class="nbtn" id="sqN" onclick="sq.ci++;renderSQ()">'+t('next')+'</button></div>';
+}
+function ansSQ(sel,ci){
+  document.querySelectorAll('[id^=sqo]').forEach(function(b){b.disabled=true});
+  document.getElementById('sqo'+ci).classList.add('ok');
+  if(sel===ci)sq.sc++;else document.getElementById('sqo'+sel).classList.add('ng');
+  document.getElementById('sqExp').classList.add('on');
+  document.getElementById('sqN').classList.add('on');
+  document.getElementById('sq-scr').textContent=sq.sc+' '+t('correct');
+}
+
+// ========== 50Q Mock ==========
+var mq={qs:[],ci:0,sc:0};
+function start50(mode){
+  document.querySelectorAll('.mbtn').forEach(function(b){b.classList.remove('on')});
+  if(event&&event.target)event.target.classList.add('on');
+  var qs=MQ.slice().sort(function(){return Math.random()-.5});
+  if(mode==='25')qs=qs.slice(0,25);if(mode==='10')qs=qs.slice(0,10);
+  mq={qs:qs,ci:0,sc:0};renderMQ();
+}
+function renderMQ(){
+  var a=document.getElementById('mq-area'),total=mq.qs.length;
+  if(mq.ci>=total){var p=Math.round(mq.sc/total*100),pl=Math.ceil(total*.9);a.innerHTML='<div class="rc"><div class="rs">'+mq.sc+'<span>/'+total+'</span></div><div class="rl">'+t('score')+': '+p+'% ('+t('passLine')+': '+pl+'/'+total+')</div><div class="rp '+(mq.sc>=pl?'pass':'fail')+'">'+(mq.sc>=pl?t('pass'):t('fail'))+'</div><br><button class="rbtn" onclick="start50(\'all\')">'+t('retry')+'</button></div>';return}
+  var q=mq.qs[mq.ci];
+  document.getElementById('mq-scr').textContent=mq.sc+' '+t('correct');
+  document.getElementById('mq-num').textContent=(mq.ci+1)+'/'+total;
+  document.getElementById('mq-bar').style.width=(mq.ci/total*100)+'%';
+  a.innerHTML='<div class="qc"><span class="qn">'+(mq.ci+1)+'</span><div class="qt">'+(q.q[lang]||q.q.en)+'</div><div class="opts"><button class="ob" onclick="ansMQ(true,'+mq.ci+')" id="mqT"><span class="ol">O</span><span>'+t('trueL')+'</span></button><button class="ob" onclick="ansMQ(false,'+mq.ci+')" id="mqF"><span class="ol">X</span><span>'+t('falseL')+'</span></button></div><div class="exp" id="mqExp">'+(q.exp[lang]||q.exp.en)+'</div><button class="nbtn" id="mqN" onclick="mq.ci++;renderMQ()">'+t('next')+'</button></div>';
+}
+function ansMQ(sel,qi){
+  var q=mq.qs[qi];
+  document.getElementById('mqT').disabled=true;document.getElementById('mqF').disabled=true;
+  document.getElementById(q.a?'mqT':'mqF').classList.add('ok');
+  if(sel===q.a)mq.sc++;else{document.getElementById(sel?'mqT':'mqF').classList.add('ng');addError(q)}
+  document.getElementById('mqExp').classList.add('on');document.getElementById('mqN').classList.add('on');
+  document.getElementById('mq-scr').textContent=mq.sc+' '+t('correct');
+}
+
+// ========== Links ==========
+function renderLinks(){
+  document.getElementById('lk-list').innerHTML=links.map(function(l){
+    var title=typeof l.t==='string'?l.t:(l.t[lang]||l.t.en);
+    var desc=l.d[lang]||l.d.en;
+    var badges=l.b.map(function(b){return '<span class="badge '+b+'">'+(b==='b-free'?'FREE':b==='b-off'?'OFFICIAL':b==='b-app'?'APP':'NEW')+'</span>'}).join('');
+    return '<div class="lc"><h3>'+title+' '+badges+'</h3><p>'+desc+'</p><a href="'+l.u+'" target="_blank">'+l.u.replace(/https?:\/\//,'').slice(0,45)+'...</a></div>';
+  }).join('');
+}
+
+// ========== Info ==========
+function renderInfo(){
+  var i=I[lang];
+  document.getElementById('info-area').innerHTML=
+    '<div class="info-card reveal"><h3>'+i.infoCmp+'</h3><table><tr>'+i.infoH.map(function(h){return '<th>'+h+'</th>'}).join('')+'</tr>'+i.infoRows.map(function(r){return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td class="highlight">'+r[2]+'</td></tr>'}).join('')+'</table></div>'+
+    '<div class="info-card reveal"><h3>'+i.infoTips+'</h3><ul style="padding-left:18px;font-size:.88rem;line-height:2">'+i.infoTipList.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul></div>';
+}
+
+// ========== Forum ==========
+function renderForum(){
+  var f=I[lang].forum;var tags={exp:t('pass'),help:'Help',tip:'Tip'};
+  document.getElementById('forum-list').innerHTML=f.map(function(p){
+    return '<div class="forum-card reveal"><span class="forum-tag '+p.tag+'">'+tags[p.tag]+'</span><h4>'+p.title+'</h4><p>'+p.body+'</p><div class="forum-meta"><span>'+p.user+'</span><span>'+p.time+'</span><span>'+p.replies+' replies</span></div></div>';
+  }).join('');
+}
+
+// ========== FAQ ==========
+function renderFAQ(){
+  var faqs=I[lang].faq;
+  document.getElementById('faq-list').innerHTML=faqs.map(function(f){
+    return '<div class="faq-item"><button class="faq-q" onclick="this.parentElement.classList.toggle(\'open\')"><span>'+f.q+'</span><svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-a"><p>'+f.a+'</p></div></div>';
+  }).join('');
+}
+
+// ========== Navigation ==========
+function goHome(){
+  document.getElementById('homepage').style.display='';
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on')});
+  window.scrollTo(0,0);
+}
+function goSection(key){
+  document.getElementById('homepage').style.display='none';
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on')});
+  var panel=document.getElementById('p-'+key);
+  if(panel){panel.classList.add('on')}
+  if(key==='signs')renderGallery();
+  if(key==='quiz-sign'&&sq.qs.length===0)startSignQuiz();
+  if(key==='quiz-50'&&mq.qs.length===0)start50('all');
+  if(key==='links')renderLinks();
+  if(key==='errors')renderErrors();
+  window.scrollTo(0,0);
+}
+
+// ========== i18n Apply ==========
+function applyI18n(){
+  document.querySelectorAll('[data-i]').forEach(function(el){
+    var k=el.getAttribute('data-i');
+    if(I[lang][k]!==undefined){
+      if(el.hasAttribute('data-html'))el.innerHTML=I[lang][k];
+      else el.textContent=I[lang][k];
+    }
+  });
+  document.getElementById('mq-modes').innerHTML=t('modes').map(function(m,i){return '<button class="mbtn'+(i===0?' on':'')+'" onclick="start50(\''+['all','25','10'][i]+'\')">'+m+'</button>'}).join('');
+  renderInfo();renderForum();renderFAQ();
+  document.querySelectorAll('.lang-b').forEach(function(b){b.classList.toggle('on',b.textContent.toLowerCase()===lang.toUpperCase()||b.textContent==={en:'EN',ja:'JA',zh:'ZH'}[lang])});
+}
+
+function switchLang(l){
+  lang=l;applyI18n();
+  document.querySelectorAll('.lang-b').forEach(function(b){
+    b.classList.toggle('on',b.textContent==={en:'EN',ja:'JA',zh:'ZH'}[l]);
+  });
+  sq={qs:[],ci:0,sc:0};mq={qs:[],ci:0,sc:0};
+  document.getElementById('sq-area').innerHTML='';
+  document.getElementById('mq-area').innerHTML='';
+}
+
+// ========== Scroll Effects ==========
+var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vis')})},{threshold:.1});
+function initReveal(){document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)})}
+window.addEventListener('scroll',function(){document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>10)});
+
+// ========== Hero Carousel ==========
+var curSlide=0,totalSlides=3,autoTimer;
+function goSlide(n){
+  curSlide=n;
+  document.getElementById('heroSlides').style.transform='translateX(-'+n*33.333+'%)';
+  document.querySelectorAll('.hero-dot-btn').forEach(function(d,i){d.classList.toggle('on',i===n)});
+  resetAuto();
+}
+function nextSlide(){goSlide((curSlide+1)%totalSlides)}
+function resetAuto(){clearInterval(autoTimer);autoTimer=setInterval(nextSlide,4500)}
+resetAuto();
+
+// ========== Init ==========
+switchLang('en');
+initReveal();
+</script>
+</body>
+</html>
