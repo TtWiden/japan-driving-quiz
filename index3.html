@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -291,9 +291,9 @@ body{font-family:'Inter','Noto Sans SC','Noto Sans JP',sans-serif;background:var
     <a href="#" data-i="nav_buy" onclick="return false">車購入</a>
     <a href="#" data-i="nav_school" onclick="return false">自動車学校</a>
     <div class="lang-sw">
-      <button class="lang-b on" onclick="switchLang('en')">EN</button>
+      <button class="lang-b on" onclick="switchLang('zh')">ZH</button>
       <button class="lang-b" onclick="switchLang('ja')">JA</button>
-      <button class="lang-b" onclick="switchLang('zh')">ZH</button>
+      <button class="lang-b" onclick="switchLang('en')">EN</button>
     </div>
   </div>
   <button class="mob-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')"><span></span><span></span><span></span></button>
@@ -856,7 +856,7 @@ function resetAuto(){clearInterval(autoTimer);autoTimer=setInterval(nextSlide,45
 resetAuto();
 
 // ========== Init ==========
-switchLang('en');
+switchLang('zh');
 initReveal();
 </script>
 </body>
